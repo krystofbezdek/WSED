@@ -1,11 +1,13 @@
 from unittest import loader
 
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
+# from django.shortcuts import render, get_object_or_404
+# from django.http import HttpResponse, HttpResponseRedirect
+# from django.urls import reverse
 from django.views import generic
+from django.db.models import Q
 
-from .models import Question, Choice
+from .models import Question
+
 
 # Define model by queryset or model =
 class IndexView(generic.ListView):
@@ -22,35 +24,24 @@ class DetailView(generic.DetailView):
     template_name = "xss_app/detail.html"
 
 
-class ResultsView(generic.DetailView):
+class SearchResultsView(generic.ListView):
     model = Question
-    template_name = "xss_app/results.html"
+    template_name = "xss_app/search.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        object_list = Question.objects.filter(
+            Q(question_text__icontains=query)
+        )
+        return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchResultsView, self).get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get("q")
+        return context
 
 
 class QuestionCreateView(generic.CreateView):
     model = Question
     template_name = "xss_app/create.html"
     fields = ["question_text"]
-
-
-def vote(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    try:
-        selected_choice = question.choice_set.get(pk=request.POST["choice"])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(
-            request,
-            "xss_app/detail.html",
-            {
-                "question": question,
-                "error_message": "You didn't select a choice.",
-            },
-        )
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse("xss_app:results", args=(question.id,)))
