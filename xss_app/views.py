@@ -9,7 +9,7 @@ from .models import Question, Choice
 
 # Define model by queryset or model =
 class IndexView(generic.ListView):
-    template_name = "polls/index.html" # Specify like this or it uses default like <app name>/<model name>_detail.html
+    template_name = "xss_app/index.html" # Specify like this or it uses default like <app name>/<model name>_detail.html
     context_object_name = "latest_question_list"
 
     def get_queryset(self):
@@ -19,12 +19,18 @@ class IndexView(generic.ListView):
 
 class DetailView(generic.DetailView):
     model = Question
-    template_name = "polls/detail.html"
+    template_name = "xss_app/detail.html"
 
 
 class ResultsView(generic.DetailView):
     model = Question
-    template_name = "polls/results.html"
+    template_name = "xss_app/results.html"
+
+
+class QuestionCreateView(generic.CreateView):
+    model = Question
+    template_name = "xss_app/create.html"
+    fields = ["question_text"]
 
 
 def vote(request, question_id):
@@ -35,7 +41,7 @@ def vote(request, question_id):
         # Redisplay the question voting form.
         return render(
             request,
-            "polls/detail.html",
+            "xss_app/detail.html",
             {
                 "question": question,
                 "error_message": "You didn't select a choice.",
@@ -47,4 +53,4 @@ def vote(request, question_id):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
+        return HttpResponseRedirect(reverse("xss_app:results", args=(question.id,)))

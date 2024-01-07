@@ -5,10 +5,12 @@
     <title>Question detail</title>
 </head>
 <body>
-    <form action="{% url 'polls:vote' question.id %}" method="post">
+    <form action="{% url 'xss_app:vote' question.id %}" method="post">
         {% csrf_token %}
         <fieldset>
+        {% autoescape off %}
             <legend><h1>{{ question.question_text }}</h1></legend>
+        {% endautoescape %}
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
             {% for choice in question.choice_set.all %}
                 <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
