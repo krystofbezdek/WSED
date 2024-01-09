@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XSS home</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %} XSS Tutorial Home {% endblock %}
+
+{% block content %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'xss_app/style.css' %}">
 
@@ -23,5 +20,4 @@
     {% else %}
         <p>No questions are available.</p>
     {% endif %}
-</body>
-</html>
+{% endblock %}

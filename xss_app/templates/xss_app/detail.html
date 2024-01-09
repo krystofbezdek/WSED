@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Question detail</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %} Question Detail {% endblock %}
+
+{% block content %}
     {% autoescape off %}
         <legend><h1>{{ question.question_text }}</h1></legend>
     {% endautoescape %}
-</body>
-</html>
+{% endblock %}

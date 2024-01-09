@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create Question</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %} Create Question {% endblock %}
+
+{% block content %}
     <form action="{% url 'xss_app:create' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Create">
     </form>
-</body>
-</html>
+{% endblock %}
