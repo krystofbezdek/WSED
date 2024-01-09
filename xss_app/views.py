@@ -1,3 +1,4 @@
+from django.db import connection
 from unittest import loader
 
 # from django.shortcuts import render, get_object_or_404
@@ -16,7 +17,7 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return Question.objects.order_by("-pub_date")[:5]
+        return Question.objects.order_by("-pub_date")[:10]
 
 
 class DetailView(generic.DetailView):
@@ -29,11 +30,25 @@ class SearchResultsView(generic.ListView):
     template_name = "xss_app/search.html"
 
     def get_queryset(self):
-        query = self.request.GET.get("q")
-        object_list = Question.objects.filter(
-            Q(question_text__icontains=query)
-        )
-        return object_list
+        query = self.request.GET.get("q") # supply 'hello' OR 1 = 1 --;
+
+        # SAFE
+        # param = f'%{query}%'
+        # object_list = Question.objects.raw("SELECT * FROM xss_app_question WHERE question_text LIKE %s", [param])
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM xss_app_question WHERE question_text = '" + query + "'")
+            rows = cursor.fetchall()
+
+        results = []
+        for row in rows:
+            row_data = {
+                "id": row[0],
+                "question_text": row[1],
+                "pub_date": row[2]
+            }
+            results.append(row_data)
+        return results
 
     def get_context_data(self, **kwargs):
         context = super(SearchResultsView, self).get_context_data(**kwargs)
