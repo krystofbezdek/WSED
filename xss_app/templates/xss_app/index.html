@@ -1,23 +1,38 @@
-{% extends "base.html" %}
+{% extends "xss_app/../base.html" %}
 
 {% block title %} XSS Tutorial Home {% endblock %}
 
 {% block content %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'xss_app/style.css' %}">
 
-    <h1>Search for a question</h1>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-5">Cross-Site Scripting (XSS)</h1>
+            <p class="lead">Cross Site Scripting (XSS) is a type of security vulnerability typically found in web applications. This flaw allows attackers to inject malicious scripts into web pages viewed by other users. XSS attacks occur when an application includes untrusted data in a web page without proper validation or escaping, thereby enabling attackers to execute scripts in the victim's browser. Such scripts can access any cookies, session tokens, or other sensitive information retained by the browser and used with that site, potentially leading to identity theft or other malicious activities. XSS vulnerabilities can be exploited by crafting malicious links, form inputs, or URL parameters, and they are mitigated through proper data sanitization, validation, and the use of secure coding practices.</p>
+        </div>
+    </div>
+
     <form action="{% url 'xss_app:search' %}" method="get">
-      <input name="q" type="text" placeholder="Search...">
+        <div class="form-group">
+            <label for="searchBar">Search for a blog post</label>
+            <input name="q" type="text" class="form-control" id="searchBar" aria-describedby="searchHelp" placeholder="Search...">
+            <small id="searchHelp" class="form-text text-muted">Input a headline name</small>
+        </div>
     </form>
 
-    {% if latest_question_list %}
-        <ul>
-        {% for question in latest_question_list %}
-            <li><a href="{% url 'xss_app:detail' question.id %}">{{ question.question_text }}</a></li>
-        {% endfor %}
-        </ul>
+    {% if blog_post_list %}
+        <div class="list-group">
+            {% for blog_post in blog_post_list %}
+                <a href="{% url 'xss_app:detail' blog_post.id %}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1">{{ blog_post.headline }}</h5>
+                      <small class="text-muted">{{ blog_post.pub_date }}</small>
+                    </div>
+                    <p class="mb-1">{{ blog_post.blog_post_text }}</p>
+                    <small class="text-muted">By: {{ blog_post.author }}</small>
+                </a>
+            {% endfor %}
+        </div>
     {% else %}
-        <p>No questions are available.</p>
+        <p>No blog posts are available.</p>
     {% endif %}
 {% endblock %}

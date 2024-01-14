@@ -1,9 +1,13 @@
-{% extends "base.html" %}
+{% extends "xss_app/../base.html" %}
 
-{% block title %} Question Detail {% endblock %}
+{% block title %} Blog Post Detail {% endblock %}
 
 {% block content %}
-    {% autoescape off %}
-        <legend><h1>{{ question.question_text }}</h1></legend>
-    {% endautoescape %}
+        <legend>
+            {% autoescape off %}
+                <h1>Headline: {{ blog.headline }}</h1>
+            {% endautoescape %}
+            <h6>By: {{ blog.author }}</h6>
+        </legend>
+        <p>{{ blog.blog_post_text }}</p>
 {% endblock %}

@@ -7,5 +7,5 @@ urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
     path("<int:pk>/", views.DetailView.as_view(), name="detail"),
     path("search/", views.SearchResultsView.as_view(), name="search"),
-    path("create/", views.QuestionCreateView.as_view(), name="create"),
+    path("create/", views.BlogPostCreateView.as_view(), name="create"),
 ]

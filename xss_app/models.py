@@ -6,8 +6,10 @@ from django.urls import reverse
 
 
 # Create your models here.
-class Question(models.Model):
-    question_text = models.CharField(max_length=200)
+class Blog(models.Model):
+    headline = models.CharField(max_length=30)
+    blog_post_text = models.CharField(max_length=200)
+    author = models.CharField(max_length=20)
     pub_date = models.DateTimeField("date published", auto_now_add=True)
 
     def was_published_recently(self):
@@ -17,4 +19,4 @@ class Question(models.Model):
         return reverse("xss_app:detail", kwargs={"pk": self.pk})
 
     def __str__(self):
-        return self.question_text
+        return self.blog_post_text

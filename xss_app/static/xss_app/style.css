@@ -1,7 +1,30 @@
-li a {
-    color: green;
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+
+.col {
+    background-color: #d1e0ff;
 }
 
 body {
-    background: white url("images/background.png") no-repeat;
+    font-family: 'Source Code Pro', monospace;
+}
+
+
+.col-7 {
+    background-color: black;
+    background-image: url("images/background.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 1000px;
+    width: 100%;
+}
+
+.jumbotron {
+    background-color: black;
+    background-image: url("images/background.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 450px;
+    width: 100%;
 }

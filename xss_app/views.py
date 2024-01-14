@@ -5,28 +5,27 @@ from unittest import loader
 # from django.http import HttpResponse, HttpResponseRedirect
 # from django.urls import reverse
 from django.views import generic
-from django.db.models import Q
+# from django.db.models import Q
 
-from .models import Question
+from .models import Blog
 
 
 # Define model by queryset or model =
 class IndexView(generic.ListView):
     template_name = "xss_app/index.html" # Specify like this or it uses default like <app name>/<model name>_detail.html
-    context_object_name = "latest_question_list"
+    context_object_name = "blog_post_list"
 
     def get_queryset(self):
-        """Return the last five published questions."""
-        return Question.objects.order_by("-pub_date")[:10]
+        return Blog.objects.order_by("-pub_date")[:10]
 
 
 class DetailView(generic.DetailView):
-    model = Question
+    model = Blog
     template_name = "xss_app/detail.html"
 
 
 class SearchResultsView(generic.ListView):
-    model = Question
+    model = Blog
     template_name = "xss_app/search.html"
 
     def get_queryset(self):
@@ -34,18 +33,20 @@ class SearchResultsView(generic.ListView):
 
         # SAFE
         # param = f'%{query}%'
-        # object_list = Question.objects.raw("SELECT * FROM xss_app_question WHERE question_text LIKE %s", [param])
+        # object_list = Blog.objects.raw("SELECT * FROM xss_app_blog WHERE headline LIKE %s", [param])
 
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM xss_app_question WHERE question_text = '" + query + "'")
+            cursor.execute("SELECT * FROM xss_app_blog WHERE headline = '" + query + "'")
             rows = cursor.fetchall()
 
         results = []
         for row in rows:
             row_data = {
                 "id": row[0],
-                "question_text": row[1],
-                "pub_date": row[2]
+                "headline": row[1],
+                "blog_post_text": row[2],
+                "author": row[3],
+                "pub_date": row[4]
             }
             results.append(row_data)
         return results
@@ -56,7 +57,7 @@ class SearchResultsView(generic.ListView):
         return context
 
 
-class QuestionCreateView(generic.CreateView):
-    model = Question
+class BlogPostCreateView(generic.CreateView):
+    model = Blog
     template_name = "xss_app/create.html"
-    fields = ["question_text"]
+    fields = ["headline", "blog_post_text", "author"]
