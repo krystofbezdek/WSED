@@ -3,12 +3,10 @@
 {% block title %} Search Results {% endblock %}
 
 {% block content %}
-    <h1>Search Results</h1>
-    <h4>You searched for: </h4><p>{% autoescape off %} {{ search_query }} {% endautoescape %}</p>
-
-
     <div class="list-group">
         {% if object_list %}
+            <h1>Search Results</h1>
+            <h4>You searched for: </h4><p>{% autoescape off %} {{ search_query }} {% endautoescape %}</p>
             {% for blog_post in object_list %}
                 <a href="{% url 'xss_app:detail' blog_post.id %}" class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
@@ -21,6 +19,7 @@
             {% endfor %}
         {% else %}
             <h1>No results found!</h1>
+            <h4>You searched for: </h4><p>{% autoescape off %} {{ search_query }} {% endautoescape %}</p>
         {% endif %}
         </div>
 {% endblock %}

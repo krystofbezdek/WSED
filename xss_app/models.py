@@ -7,7 +7,7 @@ from django.urls import reverse
 
 # Create your models here.
 class Blog(models.Model):
-    headline = models.CharField(max_length=30)
+    headline = models.CharField(max_length=200)
     blog_post_text = models.CharField(max_length=200)
     author = models.CharField(max_length=20)
     pub_date = models.DateTimeField("date published", auto_now_add=True)

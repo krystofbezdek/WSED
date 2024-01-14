@@ -1,9 +1,9 @@
 from django.db import connection
-from unittest import loader
+# from unittest import loader
 
 # from django.shortcuts import render, get_object_or_404
 # from django.http import HttpResponse, HttpResponseRedirect
-# from django.urls import reverse
+from django.urls import reverse_lazy
 from django.views import generic
 # from django.db.models import Q
 
@@ -29,14 +29,14 @@ class SearchResultsView(generic.ListView):
     template_name = "xss_app/search.html"
 
     def get_queryset(self):
-        query = self.request.GET.get("q") # supply 'hello' OR 1 = 1 --;
+        query = self.request.GET.get("q") # supply anything' OR 1 = 1 --;
 
         # SAFE
         # param = f'%{query}%'
         # object_list = Blog.objects.raw("SELECT * FROM xss_app_blog WHERE headline LIKE %s", [param])
 
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM xss_app_blog WHERE headline = '" + query + "'")
+            cursor.execute("SELECT * FROM xss_app_blog WHERE headline LIKE '%" + query + "%'")
             rows = cursor.fetchall()
 
         results = []
@@ -61,3 +61,4 @@ class BlogPostCreateView(generic.CreateView):
     model = Blog
     template_name = "xss_app/create.html"
     fields = ["headline", "blog_post_text", "author"]
+    success_url = reverse_lazy('xss_app:index')
