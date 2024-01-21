@@ -60,5 +60,12 @@ class SearchResultsView(generic.ListView):
 class BlogPostCreateView(generic.CreateView):
     model = Blog
     template_name = "xss_app/create.html"
-    fields = ["headline", "blog_post_text", "author"]
+    fields = ["headline", "blog_post_text"]
     success_url = reverse_lazy('xss_app:index')
+
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            form.instance.author = self.request.user.username
+        else:
+            form.instance.author = "Anonymous"
+        return super(BlogPostCreateView, self).form_valid(form)

@@ -1,0 +1,9 @@
+{% extends "xss_app/../base.html" %}
+
+{% block title %} Registration successful {% endblock %}
+
+{% block content %}
+    <h2>Registration Successful</h2>
+      <p>Welcome, {{ new_user.username }}! Your account has been successfully created.</p>
+      <a href="{% url 'home' %}">Home Page</a>
+{% endblock %}

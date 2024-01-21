@@ -4,6 +4,17 @@
     background-color: #d1e0ff;
 }
 
+#content {
+    padding-top: 56px;
+}
+
+#sidenav {
+    position: fixed;
+    top: 56px;
+    width: 400px;
+    overflow-y: auto;
+}
+
 body {
     font-family: 'Source Code Pro', monospace;
 }
