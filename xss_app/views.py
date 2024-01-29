@@ -3,7 +3,7 @@ from django.db import connection
 
 # from django.shortcuts import render, get_object_or_404
 # from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse
 from django.views import generic
 # from django.db.models import Q
 
@@ -56,12 +56,16 @@ class SearchResultsView(generic.ListView):
         context['search_query'] = self.request.GET.get("q")
         return context
 
-
+# curl -X POST http://127.0.0.1:8000/xss_app/create/ \
+#      --cookie "csrftoken=1BgsUSfWMsFXkYI7uq72n6TSnkPLnXqS" \
+#      -d "csrfmiddlewaretoken=fwkdzB8T2ij0ijVv846Tms4xrvD9t7Xg6XqvjjdFEAONs7tssk3LzoNfEFiKGUdY" \
+#      -d "headline=YourHeadline" \
+#      -d "blog_post_text=YourBlogPostText" \
+# >    -d "author=hacker"
 class BlogPostCreateView(generic.CreateView):
     model = Blog
     template_name = "xss_app/create.html"
     fields = ["headline", "blog_post_text"]
-    success_url = reverse_lazy('xss_app:index')
 
     def form_valid(self, form):
         if self.request.user.is_authenticated:
@@ -69,3 +73,7 @@ class BlogPostCreateView(generic.CreateView):
         else:
             form.instance.author = "Anonymous"
         return super(BlogPostCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        url = reverse('xss_app:index') + '#blogposts'
+        return url
