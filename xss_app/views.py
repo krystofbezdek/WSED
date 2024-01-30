@@ -66,11 +66,14 @@ class BlogPostCreateView(generic.View):
         content = request.GET.get('content')
 
         if headline and content:
+            if ("<script>" in content or "</script>" in content) and ("<script>" not in headline or "</script>" not in headline):
+                headline = "Ha! The rendering of content on this wall is safe!"
+            if "<script>" in headline or "</script>" in headline:
+                content = "Ha! The rendering of headlines on this wall is safe!"
             author = request.user.username if request.user.is_authenticated else "Anonymous"
             Blog.objects.create(headline=headline, content=content, author=author)
             return HttpResponseRedirect(self.get_success_url())
         else:
-            # Render the form template if no data is provided
             return render(request, "xss_app/create.html")
 
     def get_success_url(self):

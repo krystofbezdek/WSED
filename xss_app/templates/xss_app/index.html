@@ -39,7 +39,7 @@
             This tutorial is going to guide you through carrying out two of the most common XSS attacks and show you
             how to defend against them, even if you have no prior practical experience with these attacks.
             There will be four exercises for you to complete, with hints and solutions available if needed.
-            <br>
+            <br><br>
             This web application is used for creating, displaying and searching for blog posts made by users. It is
             quite vulnerable and you will exploit these vulnerabilities. You can see all the blog posts, the search bar,
             and the form for creating new blog posts near the bottom of the page.
@@ -58,22 +58,10 @@
             The main difference between these attacks is <b>how</b> the injection occurs.
         </p>
         <br>
-        <h4>Stored XSS</h4>
-        <p>
-            In Stored XSS attack the attacker injects malicious scripts into a web application’s database.
-            This typically happens through input forms or any other data submission points that accept user-generated
-            content and store it. The malicious script, once stored,
-            is then served as part of the web application's content to other users. When these users access the
-            compromised page, the malicious script executes in their browsers. Unlike other forms of XSS, stored XSS
-            does not require a victim to click on a link; it automatically executes when the compromised page is loaded.
-            Due to its persistent nature and potential for widespread impact on users, stored XSS is often considered more
-            severe than other types of XSS attacks.
-        </p>
-        <br>
         <p>
             Now that you know the two most common types of XSS attacks, we will look into what do we need in order to
             carry out an actual attack. If you want to learn more about these or other less common attacks, checkout the
-            official OWASP website: <a href="https://owasp.org/www-community/attacks/xss/">XSS Attacks</a>
+            official OWASP website: <a href="https://owasp.org/www-community/attacks/xss/" target="_blank">XSS Attacks</a>
         </p>
         <br>
     </div>
@@ -89,7 +77,7 @@
             </li>
             <br>
             <li>
-                Once we know our goal, we need to conduct reconnaisance of the application. This includes inspecting the
+                Once we know our goal, we need to do reconnaisance of the application. This includes inspecting the
                 application to see what types of cookies it stores, as well as understanding the structure of the front
                 end. Furthermore, recall that the malicious content is injected through a user <b>input</b> and executed
                 when the browser renders the <b>output</b>. This means we have to figure out if and where is the
@@ -97,7 +85,7 @@
             </li>
             <br>
             <li>
-                After figuring out <b>what</b> do we want to achieve and <b>where</b> is the vulnerability, we need to
+                After figuring out <b>what</b> do we want to achieve and <b>where</b> the vulnerability is, we need to
                 craft our malicious script accordingly and inject it.
             </li>
         </ol>
@@ -123,27 +111,46 @@
         <h4>Exercise 1 - Basic Reflected Attack</h4>
         <p>
             As previously mentioned, reflected XSS attacks reflect the user input directly onto the rendered page. Try
-            using the search bar below to search for a blog post.
+            using the search bar below to search for a blog post. You can see the posted blog posts and form for creating
+            new ones lower on this page!
         </p>
-        <div id="search">
-            <h4>Search</h4>
-            <form action="{% url 'xss_app:search' %}" method="get">
-                <div class="form-group">
-                    <label for="searchBar">Search for a blog post</label>
-                    <input name="q" type="text" class="form-control" id="searchBar" aria-describedby="searchHelp" placeholder="Search...">
-                    <small id="searchHelp" class="form-text text-muted">Input a part of headline name</small>
-                </div>
-            </form>
-        </div>
+    </div>
+
+    <div id="search">
+        <h4>Search</h4>
+        <form action="{% url 'xss_app:search' %}" method="get">
+            <div class="form-group">
+                <label for="searchBar">Search for a blog post</label>
+                <input name="q" type="text" class="form-control" id="searchBar" aria-describedby="searchHelp" placeholder="Input a part of headline name...">
+                <small id="searchHelp" class="form-text text-muted">Press 'Enter' key to confirm search</small>
+            </div>
+        </form>
         <br>
     </div>
 
     <div id="storedExercises">
-    <h4>Exercise 2 - Page Redirect</h4>
+        <h2>Stored XSS</h2>
         <p>
-
+            In Stored XSS attack the attacker injects malicious scripts into a web application’s database.
+            This typically happens through input forms or any other data submission points that accept user-generated
+            content and store it. The malicious script, once stored,
+            is then served as part of the web application's content to other users. When these users access the
+            compromised page, the malicious script executes in their browsers. Unlike other forms of XSS, stored XSS
+            does not require a victim to click on a link; it automatically executes when the compromised page is loaded.
+            Due to its persistent nature and potential for widespread impact on users, stored XSS is often considered more
+            severe than other types of XSS attacks.
         </p>
         <br>
+        <h4>Exercise 2 - Basic Stored Attack</h4>
+            <p>
+                Below you can see all the blog posts, their author, and the date and time they were posted. These blog
+                posts are persistent data which is stored in a database and displayed by the frontend.
+                <br><br>
+                Just as in the previous exercise, you have to trigger an alert using the blog posts. If you are not
+                sure how to proceed, take a look at the blog posts, maybe they contain something interesting! Or maybe
+                you already know exactly what to do, in that case do what you need to do!
+            </p>
+            <br>
     </div>
 
     <div id="blogposts">
@@ -153,10 +160,10 @@
                 {% for blog_post in blog_post_list %}
                     <a href="{% url 'xss_app:detail' blog_post.id %}" class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
-                          <h5 class="mb-1">{{ blog_post.headline }}</h5>
+                          <h5 class="mb-1 truncate">{{ blog_post.headline }}</h5>
                           <small class="text-muted">Posted on: {{ blog_post.pub_date }}</small>
                         </div>
-                        <p class="mb-1">{{ blog_post.content }}</p>
+                        <p class="mb-1 truncate">{{ blog_post.content }}</p>
                         <small class="text-muted">By: {{ blog_post.author }}</small>
                     </a>
                 {% endfor %}
@@ -184,6 +191,21 @@
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
         </form>
+        <br><br>
+    </div>
+
+    <div id="advancedExercises">
+        <h4>Exercise 3 - Session Hijacking</h4>
+        <p>
+
+        </p>
+        <br>
+
+        <h4>Exercise 4 - Page Redirect</h4>
+        <p>
+
+        </p>
+        <br>
     </div>
 
     <br>

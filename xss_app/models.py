@@ -8,8 +8,8 @@ from django.urls import reverse
 # Create your models here.
 class Blog(models.Model):
     headline = models.CharField(max_length=200)
-    content = models.CharField(max_length=200)
-    author = models.CharField(max_length=20)
+    content = models.CharField(max_length=500)
+    author = models.CharField(max_length=50)
     pub_date = models.DateTimeField("date published", auto_now_add=True)
 
     def was_published_recently(self):
@@ -19,4 +19,4 @@ class Blog(models.Model):
         return reverse("xss_app:detail", kwargs={"pk": self.pk})
 
     def __str__(self):
-        return self.content
+        return self.headline

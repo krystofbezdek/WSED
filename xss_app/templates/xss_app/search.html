@@ -40,32 +40,67 @@
         </p>
         <a href="{% url 'xss_app:index' %}#reflectedExercise">Back to Exercises</a>
         <br><br><br>
-        <div id="hint1">
-            <h5>Hint about the information revealed</h5>
-            <p>
-                You can read from the URL, that it contains a single query parameter called 'q', which is used to search
-                the blog posts. Furthermore, the presence of a parameter in the URL string reveals that a GET request is
-                used, which is less secure than the POST request. Read more about them here! Lastly, you can see that the
-                query value is rendered onto the web page as well.
-            </p>
-        </div>
-        <div id="hint2">
-            <h5>Hint about injecting script into HTML</h5>
-            <p>
-                In order to load and run JavaScript in a browser, you have to wrap the code in:
-            </p>
-            <pre class="code-snippet"><code>&lt;script&gt; Here you can define your JavaScript code &lt;/script&gt;</code></pre>
-        </div>
-        <div id="solutionBasic">
-            <h5>Solution</h5>
-            <p>
-                This is the script you should insert in order to cause an alert:
-            </p>
-            <pre class="code-snippet"><code>&lt;script&gt;alert("Congratulations! You have completed exercise 1!");&lt;/script&gt;</code></pre>
-            <p>
-                This is how your link should look like:
-            </p>
-            <pre class="code-snippet"><code><a href="http://127.0.0.1:8000/xss_app/search/?q=<script>alert('Congratulations! You have completed exercise 1!');</script>">http://127.0.0.1:8000/xss_app/search/?q=&lt;script&gt;alert("Congratulations! You have completed exercise 1!");&lt;/script&gt;</a></code></pre>
+        <div class="accordion" id="accordionExample">
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#hint1" aria-expanded="false" aria-controls="hint1">
+                  Hint about the information revealed
+                </button>
+              </h2>
+            </div>
+            <div id="hint1" class="collapse" aria-labelledby="headingOne">
+              <div class="card-body">
+                <p>
+                    You can read from the URL that it contains a single query parameter called 'q', which is used to search
+                    the blog posts. Furthermore, the presence of a parameter in the URL string reveals that a GET request is
+                    used, which is less secure than the POST request.
+                    <a href="https://www.baeldung.com/cs/http-get-vs-post" target="_blank">Read more about them here!</a>
+                    Lastly, you can see that the query value is rendered onto the web page as well.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#hint2" aria-expanded="false" aria-controls="hint2">
+                  Hint about injecting script into HTML
+                </button>
+              </h2>
+            </div>
+            <div id="hint2" class="collapse" aria-labelledby="headingTwo">
+              <div class="card-body">
+                <p>
+                    In order to load and run JavaScript in a browser, you have to wrap the code in:
+                </p>
+                <pre class="code-snippet"><code>&lt;script&gt; Here you can define your JavaScript code &lt;/script&gt;</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header" id="headingThree">
+              <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#solution" aria-expanded="false" aria-controls="solution">
+                  Solution
+                </button>
+              </h2>
+            </div>
+            <div id="solution" class="collapse" aria-labelledby="headingThree">
+              <div class="card-body">
+                <p>
+                This is the script you should insert as query parameter in order to cause an alert:
+                </p>
+                <pre class="code-snippet"><code>&lt;script&gt;alert("Congratulations! You have completed exercise 1!");&lt;/script&gt;</code></pre>
+                <p>
+                    ...and this is how your link should look like:
+                </p>
+                <pre class="code-snippet"><code><a href="http://127.0.0.1:8000/xss_app/search/?q=<script>alert('Congratulations! You have completed exercise 1!');</script>">http://127.0.0.1:8000/xss_app/search/?q=&lt;script&gt;alert("Congratulations! You have completed exercise 1!");&lt;/script&gt;</a></code></pre>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
 {% endblock %}

@@ -30,6 +30,15 @@ body {
     width: 100%;
 }
 
+.card-body {
+    background-color: black;
+    background-image: url("images/background.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
 .jumbotron {
     background-color: black;
     background-image: url("images/background.png");
@@ -50,4 +59,11 @@ body {
     font-family: 'Courier New', monospace;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
