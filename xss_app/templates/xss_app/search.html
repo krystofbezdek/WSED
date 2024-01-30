@@ -21,5 +21,51 @@
             <h1>No results found!</h1>
             <h4>You searched for: </h4><p>{% autoescape off %} {{ search_query }} {% endautoescape %}</p>
         {% endif %}
+    </div>
+    <br>
+    <br>
+    <div id="tutorial">
+        <h4>Reflected XSS exercise</h4>
+        <p>
+            You have successfully searched for a blog post! It does not matter if your search yielded results, what
+            matters is that you gained information about the search request! Specifically, there are two pieces of
+            information you need to test the vulnerability of this search request.
+            <br>
+            <br>
+            Can you figure out what information it is?
+            <br>
+            Can you use this information to simply cause an alert on this page?
+            <br>
+            Can you craft a clickable link from this?
+        </p>
+        <a href="{% url 'xss_app:index' %}#reflectedExercise">Back to Exercises</a>
+        <br><br><br>
+        <div id="hint1">
+            <h5>Hint about the information revealed</h5>
+            <p>
+                You can read from the URL, that it contains a single query parameter called 'q', which is used to search
+                the blog posts. Furthermore, the presence of a parameter in the URL string reveals that a GET request is
+                used, which is less secure than the POST request. Read more about them here! Lastly, you can see that the
+                query value is rendered onto the web page as well.
+            </p>
         </div>
+        <div id="hint2">
+            <h5>Hint about injecting script into HTML</h5>
+            <p>
+                In order to load and run JavaScript in a browser, you have to wrap the code in:
+            </p>
+            <pre class="code-snippet"><code>&lt;script&gt; Here you can define your JavaScript code &lt;/script&gt;</code></pre>
+        </div>
+        <div id="solutionBasic">
+            <h5>Solution</h5>
+            <p>
+                This is the script you should insert in order to cause an alert:
+            </p>
+            <pre class="code-snippet"><code>&lt;script&gt;alert("Congratulations! You have completed exercise 1!");&lt;/script&gt;</code></pre>
+            <p>
+                This is how your link should look like:
+            </p>
+            <pre class="code-snippet"><code><a href="http://127.0.0.1:8000/xss_app/search/?q=<script>alert('Congratulations! You have completed exercise 1!');</script>">http://127.0.0.1:8000/xss_app/search/?q=&lt;script&gt;alert("Congratulations! You have completed exercise 1!");&lt;/script&gt;</a></code></pre>
+        </div>
+    </div>
 {% endblock %}

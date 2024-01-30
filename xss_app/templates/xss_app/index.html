@@ -32,12 +32,18 @@
         </div>
     </div>
 
+{#    style="display: none;"#}
     <div id="introduction">
         <h2>Introduction</h2>
         <p>
-            This tool is going to guide you through carrying out two of the most common XSS attacks and how to defend
-            against them, even if you have no prior practical experience with these attacks. There will be three
-            exercises for you to complete, with hints and solutions available if needed. Let's get started!
+            This tutorial is going to guide you through carrying out two of the most common XSS attacks and show you
+            how to defend against them, even if you have no prior practical experience with these attacks.
+            There will be four exercises for you to complete, with hints and solutions available if needed.
+            <br>
+            This web application is used for creating, displaying and searching for blog posts made by users. It is
+            quite vulnerable and you will exploit these vulnerabilities. You can see all the blog posts, the search bar,
+            and the form for creating new blog posts near the bottom of the page.
+            Let's get started!
         </p>
     </div>
 
@@ -45,26 +51,11 @@
         <h2>Types of XSS attacks</h2>
         <p>
             There are two most common XSS attacks: <b>Reflected</b> and <b>Stored</b>. Both of these attacks target
-            the user's of the web application, exploiting their trust in the web application. The attackers try to
+            the users of the web application, exploiting their trust in the web application. The attackers try to
             inject the web application with a malicious script, be it JavaScript, HTML Flash, PHP, or other type of code
             that can execute in a victim's browser, and use it to steal cookies, session tokens, sensitive
             information the browser stores, or deface the web page and even redirect the user to malicious sites.
             The main difference between these attacks is <b>how</b> the injection occurs.
-        </p>
-        <br>
-        <h4>Reflected XSS</h4>
-        <p>
-            In Reflected XSS attack the attacker injects
-            malicious script into a webpage through user's request (like in a
-            search form or URL parameter) and includes it directly in its response without proper validation or
-            encoding, which is then immediately reflected back to the user and executed by their
-            web browser. The malicious script, embedded in a crafted request (often a URL), is 'reflected' back to the
-            user's browser, where it executes in the context of the user's session. Unlike Stored XSS, which persists in
-            the web application, Reflected XSS is non-persistent
-            and requires a user to actively trigger the attack, often through clicking on a link or a misleading email.
-            While it requires more direct interaction with the target user, Reflected XSS is still a dangerous and
-            common form of web application vulnerability due to its potential for immediate impact and its relative ease
-            of execution.
         </p>
         <br>
         <h4>Stored XSS</h4>
@@ -111,21 +102,48 @@
             </li>
         </ol>
         <br>
-        <p>
-            This web application is used for creating, displaying and searching for blog posts made by users. This web
-            application is quite vulnerable and you will exploit these vulnerabilities through three exercises.
-        </p>
     </div>
 
-    <div id="search">
-        <h4>Search</h4>
-        <form action="{% url 'xss_app:search' %}" method="get">
-            <div class="form-group">
-                <label for="searchBar">Search for a blog post</label>
-                <input name="q" type="text" class="form-control" id="searchBar" aria-describedby="searchHelp" placeholder="Search...">
-                <small id="searchHelp" class="form-text text-muted">Input a part of headline name</small>
-            </div>
-        </form>
+    <div id="reflectedExercise">
+        <h2>Reflected XSS</h2>
+        <p>
+            In Reflected XSS attack the attacker injects
+            malicious script into a webpage through user's request (like in a
+            search form or URL parameter) and includes it directly in its response without proper validation or
+            encoding, which is then immediately reflected back to the user and executed by their
+            web browser. The malicious script, embedded in a crafted request (often a URL), is 'reflected' back to the
+            user's browser, where it executes in the context of the user's session. Unlike Stored XSS, which persists in
+            the web application, Reflected XSS is non-persistent
+            and requires a user to actively trigger the attack, often through clicking on a link or a misleading email.
+            While it requires more direct interaction with the target user, Reflected XSS is still a dangerous and
+            common form of web application vulnerability due to its potential for immediate impact and its relative ease
+            of execution.
+        </p>
+        <br>
+        <h4>Exercise 1 - Basic Reflected Attack</h4>
+        <p>
+            As previously mentioned, reflected XSS attacks reflect the user input directly onto the rendered page. Try
+            using the search bar below to search for a blog post.
+        </p>
+        <div id="search">
+            <h4>Search</h4>
+            <form action="{% url 'xss_app:search' %}" method="get">
+                <div class="form-group">
+                    <label for="searchBar">Search for a blog post</label>
+                    <input name="q" type="text" class="form-control" id="searchBar" aria-describedby="searchHelp" placeholder="Search...">
+                    <small id="searchHelp" class="form-text text-muted">Input a part of headline name</small>
+                </div>
+            </form>
+        </div>
+        <br>
+    </div>
+
+    <div id="storedExercises">
+    <h4>Exercise 2 - Page Redirect</h4>
+        <p>
+
+        </p>
+        <br>
     </div>
 
     <div id="blogposts">

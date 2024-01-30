@@ -38,3 +38,16 @@ body {
     background-size: cover;
     width: 100%;
 }
+
+.code-snippet {
+    background-color: #f4f4f4;
+    border-left: 5px solid #f08080;
+    color: #333;
+    text-shadow: 0 1px white;
+    padding: 10px 15px;
+    margin: 10px 0;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
