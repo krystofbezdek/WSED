@@ -11,6 +11,7 @@
       <a class="nav-item nav-link disabled" href="#">SQL Injection Tutorial</a>
     </div>
     <div class="navbar-nav">
+        <a class="nav-item nav-link" href="javascript:void(0);" onclick="changeGenZMode()" id="genZButton">Gen Z Mode</a>
         {% if user.is_authenticated %}
             <span class="navbar-text">Logged in as {{ user.username }}</span>
             <form action="{% url 'logout' %}" method="post" class="form-inline">

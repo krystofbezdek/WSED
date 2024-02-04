@@ -20,7 +20,8 @@
         <div id="defeat" style="display: none">
             <br><br>
             <h4>
-                Good job figuring it out! Maybe you are ready for more...
+                Good job figuring it out! You have successfully embedded the script in the place of the blog post's
+                headline! Maybe you are ready for more...
             </h4>
         </div>
         <br>
@@ -32,7 +33,7 @@
                 document.getElementById('prank').style.display = 'block';
             }
             if (unsecureHeading.includes("<script>") && unsecureHeading.includes("<\/script>")) {
-                document.getElementById('secureContent').innerHTML = "Oh no! The wall is protected but I missed the headline rendering here...";
+                document.getElementById('secureContent').innerHTML = "Oh no! The wall is protected but I did not sanitise my headline rendering here!";
                 document.getElementById('defeat').style.display = 'block';
                 document.getElementById('prank').style.display = 'none';
             }

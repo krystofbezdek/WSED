@@ -10,10 +10,10 @@
             {% for blog_post in object_list %}
                 <a href="{% url 'xss_app:detail' blog_post.id %}" class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
-                      <h5 class="mb-1">{{ blog_post.headline }}</h5>
+                      <h5 class="mb-1 truncate">{{ blog_post.headline }}</h5>
                       <small class="text-muted">{{ blog_post.pub_date }}</small>
                     </div>
-                    <p class="mb-1">{{ blog_post.content }}</p>
+                    <p class="mb-1 truncate">{{ blog_post.content }}</p>
                     <small class="text-muted">By: {{ blog_post.author }}</small>
                 </a>
             {% endfor %}
@@ -25,7 +25,7 @@
     <br>
     <br>
     <div id="tutorial">
-        <h4>Reflected XSS exercise</h4>
+        <h4>Exercise 1 continued</h4>
         <p>
             You have successfully searched for a blog post! It does not matter if your search yielded results, what
             matters is that you gained information about the search request! Specifically, there are two pieces of

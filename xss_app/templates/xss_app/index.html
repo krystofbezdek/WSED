@@ -4,13 +4,19 @@
 
 {% block content_nav %}
     <div id="sidenav" class="list-group list-group-flush">
-      <a class="list-group-item list-group-item-action" href="#top" role="navigation" >Top of page</a>
-      <a class="list-group-item list-group-item-action" href="#introduction" role="navigation" >Introduction</a>
-      <a class="list-group-item list-group-item-action" href="#typesOfXSS" role="navigation" >XSS types</a>
-      <a class="list-group-item list-group-item-action" href="#ingredients" role="navigation" >Carrying out XSS</a>
-      <a class="list-group-item list-group-item-action" href="#search" role="navigation" >Search</a>
-      <a class="list-group-item list-group-item-action" href="#blogposts" role="navigation" >Blog Posts</a>
-      <a class="list-group-item list-group-item-action" href="#createnew" role="navigation" >Create</a>
+        <a class="list-group-item list-group-item-action" href="#top" role="navigation" >Go to Top</a>
+        <a class="list-group-item list-group-item-action" href="#introduction" role="navigation" >Introduction</a>
+        <a class="list-group-item list-group-item-action" href="#typesOfXSS" role="navigation" >Types of XSS Attacks</a>
+        <a class="list-group-item list-group-item-action" href="#carryOutXSS" role="navigation" >Carrying Out XSS Attacks</a>
+        <a class="list-group-item list-group-item-action" href="#reflectedXSS" role="navigation" >Reflected XSS</a>
+        <a class="list-group-item list-group-item-action" href="#exercise1" role="navigation" >Exercise 1</a>
+        <a class="list-group-item list-group-item-action" href="#search" role="navigation" >Search Bar</a>
+        <a class="list-group-item list-group-item-action" href="#storedXSS" role="navigation" >Stored XSS</a>
+        <a class="list-group-item list-group-item-action" href="#exercise2" role="navigation" >Exercise 2</a>
+        <a class="list-group-item list-group-item-action" href="#blogposts" role="navigation" >Blog Posts</a>
+        <a class="list-group-item list-group-item-action" href="#createnew" role="navigation" >Create Blog Post</a>
+        <a class="list-group-item list-group-item-action" href="#exercise3" role="navigation" >Exercise 3</a>
+        <a class="list-group-item list-group-item-action" href="#exercise4" role="navigation" >Exercise 4</a>
     </div>
 {% endblock %}
 
@@ -59,14 +65,15 @@
         </p>
         <br>
         <p>
-            Now that you know the two most common types of XSS attacks, we will look into what do we need in order to
-            carry out an actual attack. If you want to learn more about these or other less common attacks, checkout the
-            official OWASP website: <a href="https://owasp.org/www-community/attacks/xss/" target="_blank">XSS Attacks</a>
+            Now we will look into what do we need in order to carry out an actual XSS attack in general, and later we
+            will look into the specifics of Reflected and Stored attacks. If you want to learn more about these or other
+            less common attacks, checkout the official OWASP website:
+            <a href="https://owasp.org/www-community/attacks/xss/" target="_blank">XSS Attacks</a>
         </p>
         <br>
     </div>
 
-    <div id="ingredients">
+    <div id="carryOutXSS">
         <h2>How to carry out XSS attacks</h2>
         <p>In order to carry out XSS attacks, we need to complete these steps:</p>
         <ol>
@@ -93,7 +100,7 @@
     </div>
 
     <div id="reflectedExercise">
-        <h2>Reflected XSS</h2>
+        <h2 id="reflectedXSS">Reflected XSS</h2>
         <p>
             In Reflected XSS attack the attacker injects
             malicious script into a webpage through user's request (like in a
@@ -108,7 +115,7 @@
             of execution.
         </p>
         <br>
-        <h4>Exercise 1 - Basic Reflected Attack</h4>
+        <h4 id="exercise1">Exercise 1 - Basic Reflected Attack</h4>
         <p>
             As previously mentioned, reflected XSS attacks reflect the user input directly onto the rendered page. Try
             using the search bar below to search for a blog post. You can see the posted blog posts and form for creating
@@ -129,7 +136,7 @@
     </div>
 
     <div id="storedExercises">
-        <h2>Stored XSS</h2>
+        <h2 id="storedXSS">Stored XSS</h2>
         <p>
             In Stored XSS attack the attacker injects malicious scripts into a web application’s database.
             This typically happens through input forms or any other data submission points that accept user-generated
@@ -141,7 +148,7 @@
             severe than other types of XSS attacks.
         </p>
         <br>
-        <h4>Exercise 2 - Basic Stored Attack</h4>
+        <h4 id="exercise2">Exercise 2 - Basic Stored Attack</h4>
             <p>
                 Below you can see all the blog posts, their author, and the date and time they were posted. These blog
                 posts are persistent data which is stored in a database and displayed by the frontend.
@@ -195,13 +202,13 @@
     </div>
 
     <div id="advancedExercises">
-        <h4>Exercise 3 - Session Hijacking</h4>
+        <h4 id="exercise3">Exercise 3 - Session Hijacking</h4>
         <p>
 
         </p>
         <br>
 
-        <h4>Exercise 4 - Page Redirect</h4>
+        <h4 id="exercise4">Exercise 4 - Page Redirect</h4>
         <p>
 
         </p>
