@@ -5,5 +5,7 @@
 {% block content %}
     <h2>Registration Successful</h2>
       <p>Welcome, {{ new_user.username }}! Your account has been successfully created.</p>
-      <a href="{% url 'home' %}">Home Page</a>
+      <a class="btn btn-primary" href="{% url 'home' %}" role="button">Home Page</a>
+      <br><br>
+      <a class="btn btn-primary" href="{% url 'xss_app:index' %}" role="button">XSS Tutorial</a>
 {% endblock %}

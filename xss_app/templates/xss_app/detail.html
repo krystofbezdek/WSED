@@ -25,7 +25,7 @@
             </h4>
         </div>
         <br>
-        <a href="{% url 'xss_app:index' %}#blogposts">Back to Blog Posts</a>
+        <a class="btn btn-primary" href="{% url 'xss_app:index' %}#blogposts" role="button">Back to Blog Posts</a>
         <script>
             const secureContent = document.getElementById('secureContent').innerHTML;
             const unsecureHeading = document.getElementById('unsecureContent').innerHTML;
