@@ -1,0 +1,39 @@
+{% extends "xss_app/../base.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+    <h1>Welcome to WSED!</h1>
+    <p>
+        WSED (Web Security Exploits and Defences) is a tool designed primarily for Computer Security students of
+        The University of Edinburgh, who have just learned about the web security theory, but have very little to no
+        practical experience with web security exploits and defences. However, apart from concepts taught in the
+        Computer Security course, this tool assumes basic knowledge of JavaScript and HTML.
+        <br><br>
+        This web application serves both as the source of information and assignments, and as the target vulnerable
+        application you as the user will exploit. The first tutorial focused on XSS mimics an application for creating,
+        browsing and searching blogs. You can also register and log in with different user accounts, but this
+        <b>is not necessary</b> unless you attempt the advanced XSS exercises.
+        <br><br>
+        If you feel like these exercises are not challenging anymore, I would recommend checking out
+        <a href="https://google-gruyere.appspot.com/#0__gruyere" target="_blank">Google's Gruyere</a> or
+        <a href="https://www.hackthebox.com/" target="_blank">Hack the Box</a> for more difficult challenges!
+        <br><br>
+        But for now, go ahead and tackle the first set of exercises about XSS attacks!
+        <br><br>
+        If you think that you have short attention span from watching too many TikToks, try using the <b>Gen Z Mode</b>
+        in the upper right corner if you get bored!
+        <br><br>
+        <a class="btn btn-primary" href="{% url 'xss_app:index' %}" role="button">XSS Tutorial</a>
+    </p>
+    <br>
+{#    <h3>TODO:</h3>#}
+{#    <ol>#}
+{#        <li>3 modes - full guide through, exercises, playground?</li>#}
+{#        <li>Add visualisation for attacks</li>#}
+{#        <li>Add icons for recognition rather than recall</li>#}
+{#        <li>Add regex for checking of scripts</li>#}
+{#        <li>Make hints in search not look like link, but rather nice buttons</li>#}
+{#        <li>Mention addition and readability change for navbar by adding |</li>#}
+{#    </ol>#}
+{% endblock %}

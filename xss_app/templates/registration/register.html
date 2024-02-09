@@ -1,0 +1,39 @@
+{% extends "xss_app/../base.html" %}
+
+{% block title %} Register {% endblock %}
+
+{% block content %}
+    <h2>Register</h2>
+    {% if user.is_authenticated %}
+        <h4>{{ user.username }} is already logged in!</h4>
+        <h4>Logout first to register another user!</h4>
+    {% else %}
+        <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input name="username" type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Choose your username">
+                <small id="usernameHelp" class="form-text text-muted">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+              </div>
+            <div class="form-group">
+                <label for="first_name">Name</label>
+                <input name="first_name" type="text" class="form-control" id="first_name" placeholder="Your real name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input name="email" type="email" class="form-control" id="email" placeholder="Your email address">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input name="password" type="password" class="form-control" id="password" placeholder="Your password">
+            </div>
+            <div class="form-group">
+                <label for="password2">Repeat Password</label>
+                <input name="password2" type="password" class="form-control" id="password2" placeholder="Repeat your password to confirm">
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+        <br>
+        <p>Already have an account? <a href="{% url 'login' %}">Log in here</a></p>
+    {% endif %}
+{% endblock %}
