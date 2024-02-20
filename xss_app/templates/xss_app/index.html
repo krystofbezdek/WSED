@@ -212,9 +212,8 @@
 
         <div id="createnew">
             <h4>Create New Blog Post</h4>
-            {#  THIS IS ON PURPOSE VULNERABLE - FOR SAFE USAGE, USE POST AND CSRF TOKEN  #}
-            <form action="{% url 'xss_app:create' %}" method="get">
-                {#{% csrf_token %}#}
+            <form action="{% url 'xss_app:create' %}" method="post">
+                {% csrf_token %}
                 <div class="form-group">
                     <label for="headlineFor">Headline</label>
                     <input name="headline" type="text" class="form-control" id="headlineFor" aria-describedby="headlineHelp" placeholder="Summarize your thoughts">
@@ -247,10 +246,12 @@
             <br>
             <h4>Input Validation and Sanitization</h4>
             <p>
-                Escape dangerous characters supplied in user input and accept only known good input by using whitelists for
+                Escape dangerous characters supplied in user input and accept only known good input by
+                <a href="https://coralogix.com/blog/what-is-security-whitelist/" target="_blank">whitelisting</a>
                 headers, cookies, query strings, form fields, hidden fields, and other data. While input sanitization is
-                overall one of the most important aspects of computer security, for XSS prevention output encoding is much
-                more important, because the script execution happens during rendering of the output.
+                overall a very important aspect of computer security, <b>output encoding</b> is much more important for XSS
+                prevention, because the script execution happens during <b>rendering of the output</b>, not during
+                the injection of the data.
             </p>
             <br>
             <h4>Content Security Policy</h4>

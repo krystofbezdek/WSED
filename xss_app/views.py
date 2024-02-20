@@ -76,23 +76,25 @@ class SearchResultsView(generic.ListView):
         return context
 
 
-class BlogPostCreateView(generic.View):
-    def get(self, request, *args, **kwargs):
-        headline = request.GET.get('headline')
-        content = request.GET.get('content')
-        malicious_headline = False
-        malicious_content = False
+class BlogPostCreateView(generic.CreateView):
+    model = Blog
+    template_name = "xss_app/create.html"
+    fields = ["headline", "content"]
+
+    def form_valid(self, form):
+        headline = form.cleaned_data.get("headline")
+        content = form.cleaned_data.get('content')
 
         if headline and content:
             if xss_pattern.search(content) and not xss_pattern.search(headline):
-                headline = "Ha! The rendering of blog post content on this wall is safe!"
-                malicious_content = True
+                form.instance.headline = "Ha! The rendering of blog post content on this wall is safe!"
+                form.instance.malicious_content = True
             if xss_pattern.search(headline):
-                content = "Ha! The rendering of blog post headlines on this wall is safe!"
-                malicious_headline = True
-            author = request.user.username if request.user.is_authenticated else "Anonymous"
-            Blog.objects.create(headline=headline, content=content, author=author, malicious_headline=malicious_headline, malicious_content=malicious_content)
-        return HttpResponseRedirect(self.get_success_url())
+                form.instance.content = "Ha! The rendering of blog post headlines on this wall is safe!"
+                form.instance.malicious_headline = True
+            form.instance.author = self.request.user.username if self.request.user.is_authenticated else "Anonymous"
+
+        return super(BlogPostCreateView, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('xss_app:index') + '#blogposts'

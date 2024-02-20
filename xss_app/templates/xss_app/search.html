@@ -10,10 +10,18 @@
             {% for blog_post in object_list %}
                 <a href="{% url 'xss_app:detail' blog_post.id %}" class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
-                      <h5 class="mb-1 truncate">{{ blog_post.headline }}</h5>
-                      <small class="text-muted">{{ blog_post.pub_date }}</small>
+                        {% if blog_post.malicious_content %}
+                            <h5 class="mb-1 truncate" style="color: #FF6961">{{ blog_post.headline }}</h5>
+                        {% else %}
+                            <h5 class="mb-1 truncate">{{ blog_post.headline }}</h5>
+                        {% endif %}
+                      <small class="text-muted">Posted on: {{ blog_post.pub_date }}</small>
                     </div>
-                    <p class="mb-1 truncate">{{ blog_post.content }}</p>
+                        {% if blog_post.malicious_headline %}
+                            <p class="mb-1 truncate" style="color: #FF6961">{{ blog_post.content }}</p>
+                        {% else %}
+                            <p class="mb-1 truncate">{{ blog_post.content }}</p>
+                        {% endif %}
                     <small class="text-muted">By: {{ blog_post.author }}</small>
                 </a>
             {% endfor %}
