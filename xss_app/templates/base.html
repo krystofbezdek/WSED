@@ -16,11 +16,13 @@
     <link rel="stylesheet" href="{% static 'xss_app/style.css' %}">
     <script>
         let genZModeOn = localStorage.getItem('genZModeOn') === 'true';
+
         function changeGenZMode() {
             genZModeOn = !genZModeOn;
             localStorage.setItem('genZModeOn', genZModeOn);
             changeGenZElement();
         }
+
         function changeGenZElement() {
             if (genZModeOn) {
                 document.getElementById("video-container").style.display = "block";
@@ -48,6 +50,10 @@
                     window.scrollTo({top: middle, behavior: 'instant'});
                 }
             }
+        }
+
+        function setRealCookie() {
+            document.getElementById("realCookie").value = document.cookie;
         }
     </script>
 </head>

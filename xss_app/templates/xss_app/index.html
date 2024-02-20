@@ -11,6 +11,7 @@
         <a class="list-group-item list-group-item-action" href="#reflectedXSS" role="navigation" >Reflected XSS</a>
         <a class="list-group-item list-group-item-action" href="#exercise1" role="navigation" >Exercise 1</a>
         <a class="list-group-item list-group-item-action" href="#search" role="navigation" >Search Bar</a>
+        {% if part1Completed %}
         <a class="list-group-item list-group-item-action" href="#storedXSS" role="navigation" >Stored XSS</a>
         <a class="list-group-item list-group-item-action" href="#exercise2" role="navigation" >Exercise 2</a>
         <a class="list-group-item list-group-item-action" href="#blogposts" role="navigation" >Blog Posts</a>
@@ -18,6 +19,7 @@
         <a class="list-group-item list-group-item-action" href="#defences" role="navigation" >Defences</a>
 {#        <a class="list-group-item list-group-item-action" href="#exercise3" role="navigation" >Exercise 3</a>#}
 {#        <a class="list-group-item list-group-item-action" href="#exercise4" role="navigation" >Exercise 4</a>#}
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -119,8 +121,8 @@
         <h4 id="exercise1">Exercise 1 - Basic Reflected Attack</h4>
         <p>
             As previously mentioned, reflected XSS attacks reflect the user input directly onto the rendered page. Try
-            using the search bar below to search for a blog post. You can see the posted blog posts and form for creating
-            new ones lower on this page!
+            using the search bar below to search for a blog post. The posted blog posts and form for creating
+            new ones will appear alongside the second exercise once you finish this one!
         </p>
     </div>
 
@@ -136,124 +138,139 @@
         <br>
     </div>
 
-    <div id="storedExercises">
-        <h2 id="storedXSS">Stored XSS</h2>
-        <p>
-            In Stored XSS attack the attacker injects malicious scripts into a web application’s database.
-            This typically happens through input forms or any other data submission points that accept user-generated
-            content and store it. The malicious script, once stored,
-            is then served as part of the web application's content to other users. When these users access the
-            compromised page, the malicious script executes in their browsers. Unlike other forms of XSS, stored XSS
-            does not require a victim to click on a link; it automatically executes when the compromised page is loaded.
-            Due to its persistent nature and potential for widespread impact on users, stored XSS is often considered more
-            severe than other types of XSS attacks.
-        </p>
-        <br>
-        <h4 id="exercise2">Exercise 2 - Basic Stored Attack</h4>
+    {% if not part1Completed %}
+        <div id="cookieSubmitForm">
+            <form action="{% url 'xss_app:index' %}#reflectedExercise" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="cookieInput">Stolen cookie</label>
+                <input name="cookieInput" type="text" class="form-control" id="cookieInput" aria-describedby="cookieHelp" placeholder="Enter the stolen cookie to unlock the next exercise">
+                <small id="cookieHelp" class="form-text text-muted">Enter either the entire cookie, or the value following 'csrfToken='</small>
+                <input name="realCookie" type="hidden" id="realCookie">
+              </div>
+              <button type="submit" class="btn btn-primary" onclick="setRealCookie()">Submit</button>
+            </form>
+        </div>
+    {% else %}
+        <div id="storedExercises">
+            <h2 id="storedXSS">Stored XSS</h2>
             <p>
-                Below you can see all the blog posts, their author, and the date and time they were posted. These blog
-                posts are persistent data which is stored in a database and displayed by the frontend.
-                <br><br>
-                Just as in the previous exercise, you have to display the website's cookie using the blog posts. If you are not
-                sure how to proceed, take a look at the blog posts, maybe they contain something interesting! Or maybe
-                you already know exactly what to do, in that case do what you need to do!
+                In Stored XSS attack the attacker injects malicious scripts into a web application’s database.
+                This typically happens through input forms or any other data submission points that accept user-generated
+                content and store it. The malicious script, once stored,
+                is then served as part of the web application's content to other users. When these users access the
+                compromised page, the malicious script executes in their browsers. Unlike other forms of XSS, stored XSS
+                does not require a victim to click on a link; it automatically executes when the compromised page is loaded.
+                Due to its persistent nature and potential for widespread impact on users, stored XSS is often considered more
+                severe than other types of XSS attacks.
             </p>
             <br>
-    </div>
+            <h4 id="exercise2">Exercise 2 - Basic Stored Attack</h4>
+                <p>
+                    Below you can see all the blog posts, their author, and the date and time they were posted. These blog
+                    posts are persistent data which is stored in a database and displayed by the frontend.
+                    <br><br>
+                    Just as in the previous exercise, you have to display the website's cookie using the blog posts. If you are not
+                    sure how to proceed, take a look at the blog posts, maybe they contain something interesting! Or maybe
+                    you already know exactly what to do, in that case do what you need to do!
+                </p>
+                <br>
+        </div>
 
-    <div id="blogposts">
-        {% if blog_post_list %}
-            <div class="list-group">
-                <h4>Blog Posts</h4>
-                {% for blog_post in blog_post_list %}
-                    <a href="{% url 'xss_app:detail' blog_post.id %}" class="list-group-item list-group-item-action">
-                        <div class="d-flex w-100 justify-content-between">
-                          <h5 class="mb-1 truncate">{{ blog_post.headline }}</h5>
-                          <small class="text-muted">Posted on: {{ blog_post.pub_date }}</small>
-                        </div>
-                        <p class="mb-1 truncate">{{ blog_post.content }}</p>
-                        <small class="text-muted">By: {{ blog_post.author }}</small>
-                    </a>
-                {% endfor %}
-            </div>
-        {% else %}
-            <p>No blog posts are available.</p>
-        {% endif %}
-    </div>
+        <div id="blogposts">
+            {% if blog_post_list %}
+                <div class="list-group">
+                    <h4>Blog Posts</h4>
+                    {% for blog_post in blog_post_list %}
+                        <a href="{% url 'xss_app:detail' blog_post.id %}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                              <h5 class="mb-1 truncate">{{ blog_post.headline }}</h5>
+                              <small class="text-muted">Posted on: {{ blog_post.pub_date }}</small>
+                            </div>
+                            <p class="mb-1 truncate">{{ blog_post.content }}</p>
+                            <small class="text-muted">By: {{ blog_post.author }}</small>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No blog posts are available.</p>
+            {% endif %}
+        </div>
 
-    <br>
+        <br>
 
-    <div id="createnew">
-        <h4>Create New Blog Post</h4>
-        {#  THIS IS ON PURPOSE VULNERABLE - FOR SAFE USAGE, USE POST AND CSRF TOKEN  #}
-        <form action="{% url 'xss_app:create' %}" method="get">
-            {#{% csrf_token %}#}
-            <div class="form-group">
-                <label for="headlineFor">Headline</label>
-                <input name="headline" type="text" class="form-control" id="headlineFor" aria-describedby="headlineHelp" placeholder="Summarize your thoughts">
-                <small id="headlineHelp" class="form-text text-muted">Name your post here</small>
-              </div>
-            <div class="form-group">
-                <label for="contentFor">Content</label>
-                <textarea name="content" class="form-control" id="contentFor" placeholder="What do you want to say?" rows="4"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-        </form>
-        <br><br>
-    </div>
+        <div id="createnew">
+            <h4>Create New Blog Post</h4>
+            {#  THIS IS ON PURPOSE VULNERABLE - FOR SAFE USAGE, USE POST AND CSRF TOKEN  #}
+            <form action="{% url 'xss_app:create' %}" method="get">
+                {#{% csrf_token %}#}
+                <div class="form-group">
+                    <label for="headlineFor">Headline</label>
+                    <input name="headline" type="text" class="form-control" id="headlineFor" aria-describedby="headlineHelp" placeholder="Summarize your thoughts">
+                    <small id="headlineHelp" class="form-text text-muted">Name your post here</small>
+                  </div>
+                <div class="form-group">
+                    <label for="contentFor">Content</label>
+                    <textarea name="content" class="form-control" id="contentFor" placeholder="What do you want to say?" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+            <br><br>
+        </div>
 
-    <div id="defences">
-        <h2>XSS Defences</h2>
-        <p>
-            Defending against any type of attack requires robust and deep defence - implementing just a single method is
-            usually not enough! This section outlines some of the common methods of protecting your web application
-            from XSS attacks.
-        </p>
-        <br>
-        <h4>Output Encoding</h4>
-        <p>
-            Output encoding ensures that any user-generated input displayed on the page is escaped correctly,
-            meaning that characters that could be interpreted as HTML or JavaScript are converted to safe representations.
-            Here are some common problematic characters that should be encoded
-        </p>
-        <pre class="code-snippet"><code>Convert <b>&</b> to <b>&amp;amp;</b> | <b><</b>  to <b>&amp;lt;</b> | <b></b>to <b>&amp;gt;</b> | <b>"</b> to <b>&amp;quot;</b> | and <b>'</b> to <b>&amp;#x27;</b></code></pre>
-        <br>
-        <h4>Input Validation and Sanitization</h4>
-        <p>
-            Escape dangerous characters supplied in user input and accept only known good input by using whitelists for
-            headers, cookies, query strings, form fields, hidden fields, and other data. While input sanitization is
-            overall one of the most important aspects of computer security, for XSS prevention output encoding is much
-            more important, because the script execution happens during rendering of the output.
-        </p>
-        <br>
-        <h4>Content Security Policy</h4>
-        <p>
-            Content security policy (CSP) headers restrict the sources from which scripts can be loaded.
-            CSP can effectively prevent the execution of unauthorized scripts, even if an attacker manages to inject
-            malicious code into your webpage. Here is an example of such HTTP header
-        </p>
-        <pre class="code-snippet"><code>Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self';</code></pre>
-        <ul>
-            <li>default-src 'self' only allows content (scripts, styles, images, etc.) from the site's own domain.</li>
-            <li>script-src 'self' only allows JavaScript to be executed if it comes from the same domain. This <b>excludes inline scripts</b> and scripts loaded from other domains.</li>
-            <li>object-src 'none' prevents loading plugins like Flash.</li>
-            <li>base-uri 'self' restricts the URLs which can be used in a document's &lt;base&gt; element.</li>
-        </ul>
-        <br>
-        <h4>HttpOnly</h4>
-        <p>
-            Use the HttpOnly flag to prevent access to cookie data via JavaScript. This can help mitigate the damage
-            of certain XSS attacks by not allowing stolen cookies to be used in session hijacking. The HttpOnly
-            attribute is specified in the Set-Cookie HTTP response header from the server.
-        </p>
-        <pre class="code-snippet"><code>Set-Cookie: SessionId=xyz123; Path=/; Expires=Wed, 09 Jun 2024 10:18:14 GMT; HttpOnly</code></pre>
-        <ul>
-            <li>SessionId=xyz123 is the cookie being set.</li>
-            <li>Path=/ indicates that the cookie is available for pages under the specified path (in this case, the root directory).</li>
-            <li>Expires=Wed, 09 Jun 2024 10:18:14 GMT specifies when the cookie will expire and be removed.</li>
-            <li><b>HttpOnly</b> tells the browser that this cookie should not be accessible via JavaScript through the Document.cookie API or other client-side mechanisms.</li>
-        </ul>
-    </div>
+        <div id="defences">
+            <h2>XSS Defences</h2>
+            <p>
+                Defending against any type of attack requires robust and deep defence - implementing just a single method is
+                usually not enough! This section outlines some of the common methods of protecting your web application
+                from XSS attacks.
+            </p>
+            <br>
+            <h4>Output Encoding</h4>
+            <p>
+                Output encoding ensures that any user-generated input displayed on the page is escaped correctly,
+                meaning that characters that could be interpreted as HTML or JavaScript are converted to safe representations.
+                Here are some common problematic characters that should be encoded
+            </p>
+            <pre class="code-snippet"><code>Convert <b>&</b> to <b>&amp;amp;</b> | <b><</b>  to <b>&amp;lt;</b> | <b></b>to <b>&amp;gt;</b> | <b>"</b> to <b>&amp;quot;</b> | and <b>'</b> to <b>&amp;#x27;</b></code></pre>
+            <br>
+            <h4>Input Validation and Sanitization</h4>
+            <p>
+                Escape dangerous characters supplied in user input and accept only known good input by using whitelists for
+                headers, cookies, query strings, form fields, hidden fields, and other data. While input sanitization is
+                overall one of the most important aspects of computer security, for XSS prevention output encoding is much
+                more important, because the script execution happens during rendering of the output.
+            </p>
+            <br>
+            <h4>Content Security Policy</h4>
+            <p>
+                Content security policy (CSP) headers restrict the sources from which scripts can be loaded.
+                CSP can effectively prevent the execution of unauthorized scripts, even if an attacker manages to inject
+                malicious code into your webpage. Here is an example of such HTTP header
+            </p>
+            <pre class="code-snippet"><code>Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self';</code></pre>
+            <ul>
+                <li>default-src 'self' only allows content (scripts, styles, images, etc.) from the site's own domain.</li>
+                <li>script-src 'self' only allows JavaScript to be executed if it comes from the same domain. This <b>excludes inline scripts</b> and scripts loaded from other domains.</li>
+                <li>object-src 'none' prevents loading plugins like Flash.</li>
+                <li>base-uri 'self' restricts the URLs which can be used in a document's &lt;base&gt; element.</li>
+            </ul>
+            <br>
+            <h4>HttpOnly</h4>
+            <p>
+                Use the HttpOnly flag to prevent access to cookie data via JavaScript. This can help mitigate the damage
+                of certain XSS attacks by not allowing stolen cookies to be used in session hijacking. The HttpOnly
+                attribute is specified in the Set-Cookie HTTP response header from the server.
+            </p>
+            <pre class="code-snippet"><code>Set-Cookie: SessionId=xyz123; Path=/; Expires=Wed, 09 Jun 2024 10:18:14 GMT; HttpOnly</code></pre>
+            <ul>
+                <li>SessionId=xyz123 is the cookie being set.</li>
+                <li>Path=/ indicates that the cookie is available for pages under the specified path (in this case, the root directory).</li>
+                <li>Expires=Wed, 09 Jun 2024 10:18:14 GMT specifies when the cookie will expire and be removed.</li>
+                <li><b>HttpOnly</b> tells the browser that this cookie should not be accessible via JavaScript through the Document.cookie API or other client-side mechanisms.</li>
+            </ul>
+        </div>
+    {% endif %}
 
 {#    <div id="advancedExercises">#}
 {#        <h4 id="exercise3">Exercise 3 - Session Hijacking</h4>#}
