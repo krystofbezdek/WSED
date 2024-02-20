@@ -1,8 +1,8 @@
 import re
 
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 
 from .models import Blog
@@ -98,3 +98,24 @@ class BlogPostCreateView(generic.CreateView):
 
     def get_success_url(self):
         return reverse('xss_app:index') + '#blogposts'
+
+
+class ResetAllPostsView(generic.View):
+    def post(self, request, *args, **kwargs):
+        Blog.objects.filter(pk__gte=3).delete()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('xss_app:index') + '#blogposts'
+
+
+class ResetExercise1View(generic.View):
+    def post(self, request, *args, **kwargs):
+        globals.PART1_COMPLETED = False
+        globals.PERFORMED_REFLECTED_ATTACK = False
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('xss_app:index') + '#search'

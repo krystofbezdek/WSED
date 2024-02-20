@@ -155,6 +155,13 @@
             </form>
         </div>
     {% else %}
+        <div id="resetEx1">
+            <form action="{% url 'xss_app:resetEx1' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning">RESET EXERCISE 1</button>
+            </form>
+        </div>
+        <br>
         <div id="storedExercises">
             <h2 id="storedXSS">Stored XSS</h2>
             <p>
@@ -225,8 +232,18 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Create</button>
             </form>
-            <br><br>
         </div>
+
+        <br>
+
+        <div id="resetAll">
+            <form action="{% url 'xss_app:resetAll' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">RESET BLOG POSTS TO DEFAULT</button>
+            </form>
+        </div>
+
+        <br><br>
 
         <div id="defences">
             <h2>XSS Defences</h2>

@@ -8,4 +8,6 @@ urlpatterns = [
     path("<int:pk>/", views.DetailView.as_view(), name="detail"),
     path("search/", views.SearchResultsView.as_view(), name="search"),
     path("create/", views.BlogPostCreateView.as_view(), name="create"),
+    path("resetAll/", views.ResetAllPostsView.as_view(), name="resetAll"),
+    path("resetEx1/", views.ResetExercise1View.as_view(), name="resetEx1")
 ]
