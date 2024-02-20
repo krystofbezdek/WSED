@@ -11,10 +11,7 @@ class Blog(models.Model):
     author = models.CharField(max_length=50)
     malicious_headline = models.BooleanField(default=False)
     malicious_content = models.BooleanField(default=False)
-    pub_date = models.DateTimeField("date published", auto_now_add=True)
-
-    def was_published_recently(self):
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+    pub_date = models.DateTimeField("date published", default=timezone.now)
 
     def get_absolute_url(self):
         return reverse("xss_app:detail", kwargs={"pk": self.pk})
