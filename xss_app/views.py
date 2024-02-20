@@ -54,17 +54,7 @@ class DetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
-        blog = self.get_object()
         context['referer'] = self.request.META.get('HTTP_REFERER')
-
-        if xss_pattern.search(blog.headline):
-            context['success'] = True
-        else:
-            context['success'] = False
-
-        if not xss_pattern.search(blog.headline) and not xss_pattern.search(blog.content):
-            context['neutral'] = True
-
         return context
 
 
@@ -90,14 +80,18 @@ class BlogPostCreateView(generic.View):
     def get(self, request, *args, **kwargs):
         headline = request.GET.get('headline')
         content = request.GET.get('content')
+        malicious_headline = False
+        malicious_content = False
 
         if headline and content:
             if xss_pattern.search(content) and not xss_pattern.search(headline):
                 headline = "Ha! The rendering of blog post content on this wall is safe!"
+                malicious_content = True
             if xss_pattern.search(headline):
                 content = "Ha! The rendering of blog post headlines on this wall is safe!"
+                malicious_headline = True
             author = request.user.username if request.user.is_authenticated else "Anonymous"
-            Blog.objects.create(headline=headline, content=content, author=author)
+            Blog.objects.create(headline=headline, content=content, author=author, malicious_headline=malicious_headline, malicious_content=malicious_content)
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):

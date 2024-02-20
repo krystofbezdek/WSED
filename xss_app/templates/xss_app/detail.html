@@ -9,14 +9,14 @@
             {% endautoescape %}
             <h6>By: {{ blog.author }}</h6>
         </legend>
-        {% if success %}
+        {% if blog.malicious_headline %}
             <p>Oh no! The wall is protected but I did not escape my headline rendering!</p>
             <br><br>
             <h4 style="color: #428643">
                 Good job! You have successfully injected the script in the place of the blog post's headline!
                 You should look into how to defend against these attacks!
             </h4>
-        {% elif not success and neutral %}
+        {% elif not blog.malicious_headline and not blog.malicious_content %}
             <p>{{ blog.content }}</p>
         {% else %}
             <p>{{ blog.content }}</p>
