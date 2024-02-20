@@ -157,7 +157,8 @@
         <div id="resetEx1">
             <form action="{% url 'xss_app:resetEx1' %}" method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-warning">RESET EXERCISE 1</button>
+                <button type="submit" class="btn btn-warning">RESET EXERCISE 1</button><br>
+                <small class="text-muted">If you have completed Exercise 2, it will be reset as well!</small>
             </form>
         </div>
         <br>
@@ -242,87 +243,86 @@
             </form>
         </div>
         <br>
-    {% endif %}
 
-    {% if part1_completed and performed_reflected_xss and not part2_completed and not performed_stored_xss %}
-        <div id="secretSubmitForm">
-            <h4>Submit Secret</h4>
-            <form action="{% url 'xss_app:exercise2' %}#createnew" method="post">
-              {% csrf_token %}
-              <div class="form-group">
-                <label for="secretInput">Enter the stolen secret to unlock XSS Defences</label>
-                <input name="secretInput" type="text" class="form-control" id="secretInput" aria-describedby="secretHelp" placeholder="Secret">
-                <small id="secretHelp" class="form-text text-muted">Cheating didn't work in Exercise 1, and neither will here ;)</small>
-              </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
-        <br>
-    {% elif part2_completed and performed_stored_xss %}
-        <div id="resetEx2">
-            <form action="{% url 'xss_app:resetEx2' %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-warning">RESET EXERCISE 2</button>
-            </form>
-        </div>
-        <br><br>
-        <div id="defences">
-            <h2>XSS Defences</h2>
-            <p>
-                Defending against any type of attack requires robust and deep defence - implementing just a single method is
-                usually not enough! This section outlines some of the common methods of protecting your web application
-                from XSS attacks.
-            </p>
+        {% if not part2_completed or not performed_stored_xss %}
+            <div id="secretSubmitForm">
+                <h4>Submit Secret</h4>
+                <form action="{% url 'xss_app:exercise2' %}#createnew" method="post">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="secretInput">Enter the stolen secret to unlock XSS Defences</label>
+                    <input name="secretInput" type="text" class="form-control" id="secretInput" aria-describedby="secretHelp" placeholder="Secret">
+                    <small id="secretHelp" class="form-text text-muted">Cheating didn't work in Exercise 1, and neither will here ;)</small>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
             <br>
-            <h4>Output Encoding</h4>
-            <p>
-                Output encoding ensures that any user-generated input displayed on the page is escaped correctly,
-                meaning that characters that could be interpreted as HTML or JavaScript are converted to safe representations.
-                Here are some common problematic characters that should be encoded
-            </p>
-            <pre class="code-snippet"><code>Convert <b>&</b> to <b>&amp;amp;</b> | <b><</b>  to <b>&amp;lt;</b> | <b></b>to <b>&amp;gt;</b> | <b>"</b> to <b>&amp;quot;</b> | and <b>'</b> to <b>&amp;#x27;</b></code></pre>
+        {% elif part2_completed and performed_stored_xss %}
+            <div id="resetEx2">
+                <form action="{% url 'xss_app:resetEx2' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning">RESET EXERCISE 2</button>
+                </form>
+            </div>
+            <br><br>
+            <div id="defences">
+                <h2>XSS Defences</h2>
+                <p>
+                    Defending against any type of attack requires robust and deep defence - implementing just a single method is
+                    usually not enough! This section outlines some of the common methods of protecting your web application
+                    from XSS attacks.
+                </p>
+                <br>
+                <h4>Output Encoding</h4>
+                <p>
+                    Output encoding ensures that any user-generated input displayed on the page is escaped correctly,
+                    meaning that characters that could be interpreted as HTML or JavaScript are converted to safe representations.
+                    Here are some common problematic characters that should be encoded
+                </p>
+                <pre class="code-snippet"><code>Convert <b>&</b> to <b>&amp;amp;</b> | <b><</b>  to <b>&amp;lt;</b> | <b></b>to <b>&amp;gt;</b> | <b>"</b> to <b>&amp;quot;</b> | and <b>'</b> to <b>&amp;#x27;</b></code></pre>
+                <br>
+                <h4>Input Validation and Sanitization</h4>
+                <p>
+                    Escape dangerous characters supplied in user input and accept only known good input by
+                    <a href="https://coralogix.com/blog/what-is-security-whitelist/" target="_blank">whitelisting</a>
+                    headers, cookies, query strings, form fields, hidden fields, and other data. While input sanitization is
+                    overall a very important aspect of computer security, <b>output encoding</b> is much more important for XSS
+                    prevention, because the script execution happens during <b>rendering of the output</b>, not during
+                    the injection of the data.
+                </p>
+                <br>
+                <h4>Content Security Policy</h4>
+                <p>
+                    Content security policy (CSP) headers restrict the sources from which scripts can be loaded.
+                    CSP can effectively prevent the execution of unauthorized scripts, even if an attacker manages to inject
+                    malicious code into your webpage. Here is an example of such HTTP header
+                </p>
+                <pre class="code-snippet"><code>Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self';</code></pre>
+                <ul>
+                    <li>default-src 'self' only allows content (scripts, styles, images, etc.) from the site's own domain.</li>
+                    <li>script-src 'self' only allows JavaScript to be executed if it comes from the same domain. This <b>excludes inline scripts</b> and scripts loaded from other domains.</li>
+                    <li>object-src 'none' prevents loading plugins like Flash.</li>
+                    <li>base-uri 'self' restricts the URLs which can be used in a document's &lt;base&gt; element.</li>
+                </ul>
+                <br>
+                <h4>HttpOnly</h4>
+                <p>
+                    Use the HttpOnly flag to prevent access to cookie data via JavaScript. This can help mitigate the damage
+                    of certain XSS attacks by not allowing stolen cookies to be used in session hijacking. The HttpOnly
+                    attribute is specified in the Set-Cookie HTTP response header from the server.
+                </p>
+                <pre class="code-snippet"><code>Set-Cookie: SessionId=xyz123; Path=/; Expires=Wed, 09 Jun 2024 10:18:14 GMT; HttpOnly</code></pre>
+                <ul>
+                    <li>SessionId=xyz123 is the cookie being set.</li>
+                    <li>Path=/ indicates that the cookie is available for pages under the specified path (in this case, the root directory).</li>
+                    <li>Expires=Wed, 09 Jun 2024 10:18:14 GMT specifies when the cookie will expire and be removed.</li>
+                    <li><b>HttpOnly</b> tells the browser that this cookie should not be accessible via JavaScript through the Document.cookie API or other client-side mechanisms.</li>
+                </ul>
+            </div>
             <br>
-            <h4>Input Validation and Sanitization</h4>
-            <p>
-                Escape dangerous characters supplied in user input and accept only known good input by
-                <a href="https://coralogix.com/blog/what-is-security-whitelist/" target="_blank">whitelisting</a>
-                headers, cookies, query strings, form fields, hidden fields, and other data. While input sanitization is
-                overall a very important aspect of computer security, <b>output encoding</b> is much more important for XSS
-                prevention, because the script execution happens during <b>rendering of the output</b>, not during
-                the injection of the data.
-            </p>
-            <br>
-            <h4>Content Security Policy</h4>
-            <p>
-                Content security policy (CSP) headers restrict the sources from which scripts can be loaded.
-                CSP can effectively prevent the execution of unauthorized scripts, even if an attacker manages to inject
-                malicious code into your webpage. Here is an example of such HTTP header
-            </p>
-            <pre class="code-snippet"><code>Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self';</code></pre>
-            <ul>
-                <li>default-src 'self' only allows content (scripts, styles, images, etc.) from the site's own domain.</li>
-                <li>script-src 'self' only allows JavaScript to be executed if it comes from the same domain. This <b>excludes inline scripts</b> and scripts loaded from other domains.</li>
-                <li>object-src 'none' prevents loading plugins like Flash.</li>
-                <li>base-uri 'self' restricts the URLs which can be used in a document's &lt;base&gt; element.</li>
-            </ul>
-            <br>
-            <h4>HttpOnly</h4>
-            <p>
-                Use the HttpOnly flag to prevent access to cookie data via JavaScript. This can help mitigate the damage
-                of certain XSS attacks by not allowing stolen cookies to be used in session hijacking. The HttpOnly
-                attribute is specified in the Set-Cookie HTTP response header from the server.
-            </p>
-            <pre class="code-snippet"><code>Set-Cookie: SessionId=xyz123; Path=/; Expires=Wed, 09 Jun 2024 10:18:14 GMT; HttpOnly</code></pre>
-            <ul>
-                <li>SessionId=xyz123 is the cookie being set.</li>
-                <li>Path=/ indicates that the cookie is available for pages under the specified path (in this case, the root directory).</li>
-                <li>Expires=Wed, 09 Jun 2024 10:18:14 GMT specifies when the cookie will expire and be removed.</li>
-                <li><b>HttpOnly</b> tells the browser that this cookie should not be accessible via JavaScript through the Document.cookie API or other client-side mechanisms.</li>
-            </ul>
-        </div>
-        <br>
-        <a href="" type="button" class="btn btn-success btn-lg btn-block">FINISH</a>
+            <a href="" type="button" class="btn btn-success btn-lg btn-block">FINISH</a>
+        {% endif %}
     {% endif %}
-
-    <br>
+    <br><br>
 {% endblock %}
