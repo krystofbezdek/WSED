@@ -134,17 +134,19 @@
                 <input name="q" type="text" class="form-control" id="searchBar" aria-describedby="searchHelp" placeholder="Input a part of headline name...">
                 <small id="searchHelp" class="form-text text-muted">Press 'Enter' key to confirm search</small>
             </div>
+            <button type="submit" class="btn btn-primary">Search</button>
         </form>
         <br>
     </div>
 
     {% if not part1Completed %}
         <div id="cookieSubmitForm">
+            <h4>Submit Cookie</h4>
             <form action="{% url 'xss_app:index' %}#reflectedExercise" method="post">
               {% csrf_token %}
               <div class="form-group">
-                <label for="cookieInput">Stolen cookie</label>
-                <input name="cookieInput" type="text" class="form-control" id="cookieInput" aria-describedby="cookieHelp" placeholder="Enter the stolen cookie to unlock the next exercise">
+                <label for="cookieInput">Enter the stolen cookie to unlock the next exercise</label>
+                <input name="cookieInput" type="text" class="form-control" id="cookieInput" aria-describedby="cookieHelp" placeholder="Stolen cookie">
                 <small id="cookieHelp" class="form-text text-muted">Enter either the entire cookie, or the value following 'csrfToken='</small>
                 <input name="realCookie" type="hidden" id="realCookie">
               </div>

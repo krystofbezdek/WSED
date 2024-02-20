@@ -72,9 +72,7 @@ class BlogPostCreateView(generic.View):
                 content = "Ha! The rendering of blog post headlines on this wall is safe!"
             author = request.user.username if request.user.is_authenticated else "Anonymous"
             Blog.objects.create(headline=headline, content=content, author=author)
-            return HttpResponseRedirect(self.get_success_url())
-        else:
-            return render(request, "xss_app/create.html")
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse('xss_app:index') + '#blogposts'
