@@ -12,13 +12,13 @@
         <a class="list-group-item list-group-item-action" href="#exercise1" role="navigation" >Exercise 1</a>
         <a class="list-group-item list-group-item-action" href="#search" role="navigation" >Search Bar</a>
         {% if part1_completed %}
-        <a class="list-group-item list-group-item-action" href="#storedXSS" role="navigation" >Stored XSS</a>
-        <a class="list-group-item list-group-item-action" href="#exercise2" role="navigation" >Exercise 2</a>
-        <a class="list-group-item list-group-item-action" href="#blogposts" role="navigation" >Blog Posts</a>
-        <a class="list-group-item list-group-item-action" href="#createnew" role="navigation" >Create Blog Post</a>
-        <a class="list-group-item list-group-item-action" href="#defences" role="navigation" >Defences</a>
-{#        <a class="list-group-item list-group-item-action" href="#exercise3" role="navigation" >Exercise 3</a>#}
-{#        <a class="list-group-item list-group-item-action" href="#exercise4" role="navigation" >Exercise 4</a>#}
+            <a class="list-group-item list-group-item-action" href="#storedXSS" role="navigation" >Stored XSS</a>
+            <a class="list-group-item list-group-item-action" href="#exercise2" role="navigation" >Exercise 2</a>
+            <a class="list-group-item list-group-item-action" href="#blogposts" role="navigation" >Blog Posts</a>
+            <a class="list-group-item list-group-item-action" href="#createnew" role="navigation" >Create Blog Post</a>
+        {% endif %}
+        {% if part2_completed %}
+            <a class="list-group-item list-group-item-action" href="#defences" role="navigation" >Defences</a>
         {% endif %}
     </div>
 {% endblock %}
@@ -41,7 +41,6 @@
         </div>
     </div>
 
-{#    style="display: none;"#}
     <div id="introduction">
         <h2>Introduction</h2>
         <p>
@@ -242,9 +241,31 @@
                 <button type="submit" class="btn btn-danger">RESET BLOG POSTS TO DEFAULT</button>
             </form>
         </div>
+        <br>
+    {% endif %}
 
+    {% if part1_completed and performed_reflected_xss and not part2_completed and not performed_stored_xss %}
+        <div id="secretSubmitForm">
+            <h4>Submit Secret</h4>
+            <form action="{% url 'xss_app:exercise2' %}#createnew" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="secretInput">Enter the stolen secret to unlock XSS Defences</label>
+                <input name="secretInput" type="text" class="form-control" id="secretInput" aria-describedby="secretHelp" placeholder="Secret">
+                <small id="secretHelp" class="form-text text-muted">Cheating didn't work in Exercise 1, and neither will here ;)</small>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <br>
+    {% elif part2_completed and performed_stored_xss %}
+        <div id="resetEx2">
+            <form action="{% url 'xss_app:resetEx2' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning">RESET EXERCISE 2</button>
+            </form>
+        </div>
         <br><br>
-
         <div id="defences">
             <h2>XSS Defences</h2>
             <p>
@@ -299,21 +320,9 @@
                 <li><b>HttpOnly</b> tells the browser that this cookie should not be accessible via JavaScript through the Document.cookie API or other client-side mechanisms.</li>
             </ul>
         </div>
+        <br>
+        <a href="" type="button" class="btn btn-success btn-lg btn-block">FINISH</a>
     {% endif %}
-
-{#    <div id="advancedExercises">#}
-{#        <h4 id="exercise3">Exercise 3 - Session Hijacking</h4>#}
-{#        <p>#}
-{##}
-{#        </p>#}
-{#        <br>#}
-{##}
-{#        <h4 id="exercise4">Exercise 4 - Page Redirect</h4>#}
-{#        <p>#}
-{##}
-{#        </p>#}
-{#        <br>#}
-{#    </div>#}
 
     <br>
 {% endblock %}

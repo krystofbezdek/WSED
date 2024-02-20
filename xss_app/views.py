@@ -31,16 +31,45 @@ class IndexView(generic.ListView):
 
     def post(self, request, *args, **kwargs):
         user_input_cookie = request.POST.get('cookieInput')
-        real_cookie = request.POST.get('realCookie')
+        real_cookie = request.POST.get('realCookie', 'default=')
         csrf_value = real_cookie.split('=')[1]
 
         if user_input_cookie == real_cookie or user_input_cookie == csrf_value and self.performed_reflected_xss:
             globals.PART1_COMPLETED = True
-        else:
-            globals.PART1_COMPLETED = False
 
         self.part1_completed = globals.PART1_COMPLETED
         self.object_list = self.get_queryset()
+        return render(request, "xss_app/index.html", self.get_context_data(**kwargs))
+
+
+class Exercise2View(generic.View):
+    def __init__(self):
+        self.performed_stored_xss = None
+        self.part2_completed = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.part2_completed = globals.PART2_COMPLETED
+        self.performed_stored_xss = globals.PERFORMED_STORED_ATTACK
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) if hasattr(super(), 'get_context_data') else {}
+        context['part2_completed'] = self.part2_completed
+        context['performed_stored_xss'] = self.performed_stored_xss
+        context['part1_completed'] = globals.PART1_COMPLETED
+        context['performed_reflected_xss'] = globals.PERFORMED_REFLECTED_ATTACK
+        context['blog_post_list'] = Blog.objects.order_by("-pub_date")[:10]
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user_input_secret = request.POST.get('secretInput')
+
+        # <script>document.getElementById("secretMessage").style.display = "block";</script>
+        if user_input_secret == globals.STORED_SECRET and self.performed_stored_xss:
+            globals.PART2_COMPLETED = True
+
+        self.part2_completed = globals.PART2_COMPLETED
+
         return render(request, "xss_app/index.html", self.get_context_data(**kwargs))
 
 
@@ -50,6 +79,8 @@ class DetailView(generic.DetailView):
 
     def get_object(self):
         blog = get_object_or_404(Blog, pk=self.kwargs['pk'])
+        if blog.malicious_headline:
+            globals.PERFORMED_STORED_ATTACK = True
         return blog
 
     def get_context_data(self, **kwargs):
@@ -64,8 +95,10 @@ class SearchResultsView(generic.ListView):
 
     def get_queryset(self):
         query = self.request.GET.get("q")
+
         if xss_pattern.search(query):
             globals.PERFORMED_REFLECTED_ATTACK = True
+
         param = f'%{query}%'
         object_list = Blog.objects.raw("SELECT * FROM xss_app_blog WHERE headline LIKE %s", [param])
         return object_list
@@ -119,3 +152,14 @@ class ResetExercise1View(generic.View):
 
     def get_success_url(self):
         return reverse('xss_app:index') + '#search'
+
+
+class ResetExercise2View(generic.View):
+    def post(self, request, *args, **kwargs):
+        globals.PART2_COMPLETED = False
+        globals.PERFORMED_STORED_ATTACK = False
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('xss_app:index') + '#blogposts'

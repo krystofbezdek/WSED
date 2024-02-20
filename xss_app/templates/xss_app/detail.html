@@ -3,6 +3,10 @@
 {% block title %} Blog Post Detail {% endblock %}
 
 {% block content %}
+        <div id="secretMessage" style="display: none">
+            <br>
+            <h4>The secret code is: <span id="secretCode" style="color: #428643">I never skip breakfast!</span></h4>
+        </div>
         <legend>
             {% autoescape off %}
                 <h1>{{ blog.headline }}</h1>
@@ -13,8 +17,8 @@
             <p>Oh no! The wall is protected but I did not escape my headline rendering!</p>
             <br><br>
             <h4 style="color: #428643">
-                Good job! You have successfully injected the script in the place of the blog post's headline!
-                You should look into how to defend against these attacks!
+                Good job! You have successfully injected a script in the place of the blog post's headline!
+                You should see the secret above if your script works correctly!
             </h4>
         {% elif not blog.malicious_headline and not blog.malicious_content %}
             <p>{{ blog.content }}</p>
