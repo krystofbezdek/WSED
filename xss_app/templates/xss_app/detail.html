@@ -5,29 +5,25 @@
 {% block content %}
         <legend>
             {% autoescape off %}
-                <h1 id="unsecureContent">{{ blog.headline }}</h1>
+                <h1>{{ blog.headline }}</h1>
             {% endautoescape %}
             <h6>By: {{ blog.author }}</h6>
         </legend>
         {% if success %}
             <p>Oh no! The wall is protected but I did not escape my headline rendering!</p>
-            <div id="defeat">
-                <br><br>
-                <h4>
-                    Good job! You have successfully injected the script in the place of the blog post's headline!
-                    You should look into how to defend against these attacks!
-                </h4>
-            </div>
+            <br><br>
+            <h4 style="color: #428643">
+                Good job! You have successfully injected the script in the place of the blog post's headline!
+                You should look into how to defend against these attacks!
+            </h4>
         {% elif not success and neutral %}
-            <p id="secureContent">{{ blog.content }}</p>
+            <p>{{ blog.content }}</p>
         {% else %}
-            <p id="secureContent">{{ blog.content }}</p>
-            <div id="prank">
-                <br><br>
-                <h4>
-                    It seems like the content field is secured well, both on the wall and in post detail! Try something else?
-                </h4>
-            </div>
+            <p>{{ blog.content }}</p>
+            <br><br>
+            <h4 style="color: #FF6961">
+                It seems like the content field is secured well, both on the wall and in post detail! Try something else?
+            </h4>
         {% endif %}
         <br>
         <a class="btn btn-primary" href="{{ referer }}#blogposts" role="button">Go Back</a>
