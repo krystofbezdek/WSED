@@ -9,32 +9,26 @@
             {% endautoescape %}
             <h6>By: {{ blog.author }}</h6>
         </legend>
-        <p id="secureContent">{{ blog.content }}</p>
-        <div id="prank" style="display: none">
-            <br><br>
-            <h4>
-                It seems like the content field is secured well, both on the wall and in post detail! Try something else?
-            </h4>
-        </div>
-        <div id="defeat" style="display: none">
-            <br><br>
-            <h4>
-                Good job! You have successfully injected the script in the place of the blog post's headline!
-                You should look into how to defend against these attacks!
-            </h4>
-        </div>
+        {% if success %}
+            <p>Oh no! The wall is protected but I did not escape my headline rendering!</p>
+            <div id="defeat">
+                <br><br>
+                <h4>
+                    Good job! You have successfully injected the script in the place of the blog post's headline!
+                    You should look into how to defend against these attacks!
+                </h4>
+            </div>
+        {% elif not success and neutral %}
+            <p id="secureContent">{{ blog.content }}</p>
+        {% else %}
+            <p id="secureContent">{{ blog.content }}</p>
+            <div id="prank">
+                <br><br>
+                <h4>
+                    It seems like the content field is secured well, both on the wall and in post detail! Try something else?
+                </h4>
+            </div>
+        {% endif %}
         <br>
-        <a class="btn btn-primary" href="{% url 'xss_app:index' %}#blogposts" role="button">Back to Blog Posts</a>
-        <script>
-            const secureContent = document.getElementById('secureContent').innerHTML;
-            const unsecureHeading = document.getElementById('unsecureContent').innerHTML;
-            if (secureContent.includes("&lt;script&gt;") || secureContent.includes("&lt;/script&gt;")) {
-                document.getElementById('prank').style.display = 'block';
-            }
-            if (unsecureHeading.includes("<script>") && unsecureHeading.includes("<\/script>")) {
-                document.getElementById('secureContent').innerHTML = "Oh no! The wall is protected but I did not escape my headline rendering here!";
-                document.getElementById('defeat').style.display = 'block';
-                document.getElementById('prank').style.display = 'none';
-            }
-        </script>
+        <a class="btn btn-primary" href="{{ referer }}#blogposts" role="button">Go Back</a>
 {% endblock %}

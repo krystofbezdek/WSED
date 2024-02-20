@@ -11,7 +11,7 @@
         <a class="list-group-item list-group-item-action" href="#reflectedXSS" role="navigation" >Reflected XSS</a>
         <a class="list-group-item list-group-item-action" href="#exercise1" role="navigation" >Exercise 1</a>
         <a class="list-group-item list-group-item-action" href="#search" role="navigation" >Search Bar</a>
-        {% if part1Completed %}
+        {% if part1_completed %}
         <a class="list-group-item list-group-item-action" href="#storedXSS" role="navigation" >Stored XSS</a>
         <a class="list-group-item list-group-item-action" href="#exercise2" role="navigation" >Exercise 2</a>
         <a class="list-group-item list-group-item-action" href="#blogposts" role="navigation" >Blog Posts</a>
@@ -120,9 +120,10 @@
         <br>
         <h4 id="exercise1">Exercise 1 - Basic Reflected Attack</h4>
         <p>
-            As previously mentioned, reflected XSS attacks reflect the user input directly onto the rendered page. Try
-            using the search bar below to search for a blog post. The posted blog posts and form for creating
-            new ones will appear alongside the second exercise once you finish this one!
+            As previously mentioned, reflected XSS attacks reflect the user input directly onto the rendered page. Use
+            the search bar below to search for a blog post and exploit it to conduct the attack. The posted blog posts
+            and form for creating new ones will appear alongside the second exercise once you successfully conduct the
+            attack and submit the correct cookie value!
         </p>
     </div>
 
@@ -139,15 +140,15 @@
         <br>
     </div>
 
-    {% if not part1Completed %}
+    {% if not part1_completed or not performed_reflected_xss %}
         <div id="cookieSubmitForm">
             <h4>Submit Cookie</h4>
             <form action="{% url 'xss_app:index' %}#reflectedExercise" method="post">
               {% csrf_token %}
               <div class="form-group">
                 <label for="cookieInput">Enter the stolen cookie to unlock the next exercise</label>
-                <input name="cookieInput" type="text" class="form-control" id="cookieInput" aria-describedby="cookieHelp" placeholder="Stolen cookie">
-                <small id="cookieHelp" class="form-text text-muted">Enter either the entire cookie, or the value following 'csrfToken='</small>
+                <input name="cookieInput" type="text" class="form-control" id="cookieInput" aria-describedby="cookieHelp" placeholder="Entire cookie or the value following 'csrfToken='">
+                <small id="cookieHelp" class="form-text text-muted">Don't even try cheating by just submitting the cookie value without conducting the attack ;)</small>
                 <input name="realCookie" type="hidden" id="realCookie">
               </div>
               <button type="submit" class="btn btn-primary" onclick="setRealCookie()">Submit</button>
