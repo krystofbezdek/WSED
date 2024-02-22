@@ -180,9 +180,12 @@
                     Below you can see all the blog posts, their author, and the date and time they were posted. These blog
                     posts are persistent data which is stored in a database and displayed by the frontend.
                     <br><br>
-                    Just as in the previous exercise, you have to display the website's cookie using the blog posts. If you are not
-                    sure how to proceed, take a look at the blog posts, maybe they contain something interesting! Or maybe
-                    you already know exactly what to do, in that case do what you need to do!
+                    In this exercise, you have to conduct a stored XSS attack to obtain a secret message. This secret is
+                    contained in a hidden HTML element, and your script should reveal the element containing secret in
+                    order to steal it. Think about when and where your injected script runs and what can it access.
+                    Inspecting the website can help you with finding the secret message! If you are not sure how to
+                    proceed, take a look at the blog posts, maybe they contain something interesting! Or maybe you
+                    already know exactly what to do, in that case do what you need to do!
                 </p>
                 <br>
         </div>
@@ -259,6 +262,15 @@
             </div>
             <br>
         {% elif part2_completed and performed_stored_xss %}
+            <p>
+                You may ask "What is the point of injecting the script to show the
+                message, when I can just inspect the web page?". Hidden inputs or elements can be, for example, used as
+                parts of forms to contain data that cannot be seen and modified by users, but it is still relevant for
+                the backend. A real example is a hidden csrf token used in the forms for creating a blog post or for
+                resetting the blog posts to default (you can check this again by inspecting the elements). If a victim
+                were to visit your blog post containing the malicious script, you could exploit the hidden input/element.
+            </p>
+            <br>
             <div id="resetEx2">
                 <form action="{% url 'xss_app:resetEx2' %}" method="post">
                     {% csrf_token %}
