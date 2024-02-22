@@ -12,9 +12,18 @@
     "model": "xss_app.Blog",
     "pk": 2,
     "fields": {
-      "headline": "How to: Stored XSS Attacks",
+      "headline": "Stored XSS Attacks: Where to inject?",
       "content": "You are in luck, because I am going to reveal the secrets to how to hack these blog posts! Since there are two input fields in this form, you have to insert your malicious script into one of these! But which one? Well, that's up to you try out. My bet would be on the content input...",
       "author": "Chad Fellow Hacker"
+    }
+  },
+  {
+    "model": "xss_app.Blog",
+    "pk": 3,
+    "fields": {
+      "headline": "Stored XSS Attacks: How to use JavaScript?",
+      "content": "I am a rare unicorn who loves JavaScript (I know, crazy right?), but I understand it is not for everyone. As such, I wrote this blog post to spare you the suffering of having to deal with it. Below you can find some hints regarding JavaScript methods and the solution to exercise 2. Happy hacking!",
+      "author": "JavaScript Enthusiast"
     }
   }
 ]

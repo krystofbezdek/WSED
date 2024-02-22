@@ -250,7 +250,7 @@
         {% if not part2_completed or not performed_stored_xss %}
             <div id="secretSubmitForm">
                 <h4>Submit Secret</h4>
-                <form action="{% url 'xss_app:exercise2' %}#createnew" method="post">
+                <form action="{% url 'xss_app:index' %}#createnew" method="post">
                   {% csrf_token %}
                   <div class="form-group">
                     <label for="secretInput">Enter the stolen secret to unlock XSS Defences</label>
@@ -262,15 +262,6 @@
             </div>
             <br>
         {% elif part2_completed and performed_stored_xss %}
-            <p>
-                You may ask "What is the point of injecting the script to show the
-                message, when I can just inspect the web page?". Hidden inputs or elements can be, for example, used as
-                parts of forms to contain data that cannot be seen and modified by users, but it is still relevant for
-                the backend. A real example is a hidden csrf token used in the forms for creating a blog post or for
-                resetting the blog posts to default (you can check this again by inspecting the elements). If a victim
-                were to visit your blog post containing the malicious script, you could exploit the hidden input/element.
-            </p>
-            <br>
             <div id="resetEx2">
                 <form action="{% url 'xss_app:resetEx2' %}" method="post">
                     {% csrf_token %}
@@ -333,7 +324,7 @@
                 </ul>
             </div>
             <br>
-            <a href="" type="button" class="btn btn-success btn-lg btn-block">FINISH</a>
+            <a href="{% url 'finish' %}" type="button" class="btn btn-success btn-lg btn-block">FINISH</a>
         {% endif %}
     {% endif %}
     <br><br>

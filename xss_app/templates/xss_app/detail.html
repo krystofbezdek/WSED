@@ -29,6 +29,86 @@
                 It seems like the content field is secured well, both on the wall and in post detail! Try something else?
             </h4>
         {% endif %}
-        <br>
+        {% if blog.pk == 3 %}
+            <div class="accordion" id="accordionExample">
+              <h4>Hints</h4>
+              <div class="card">
+                <div class="card-header" id="headingOne">
+                  <h2 class="mb-0">
+                    <button class="btn btn-light btn-block collapsed" type="button" data-toggle="collapse" data-target="#hint1" aria-expanded="false" aria-controls="hint1">
+                      Hint about accessing HTML elements
+                    </button>
+                  </h2>
+                </div>
+                <div id="hint1" class="collapse" aria-labelledby="headingOne">
+                  <div class="card-body">
+                    <p>
+                        You can access HTML elements using class, id, or tag names themselves. Depending on what you
+                        use, different access
+                        <a href="https://www.w3schools.com/js/js_htmldom_elements.asp" target="_blank">methods</a>
+                        may return a single element, or a list of elements. The most common and relevant way of
+                        accessing an element is using its ID. This returns a single element, because ID always has to
+                        be unique.
+                    </p>
+                    <pre class="code-snippet"><code>myElement = document.getElementById("idString");</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header" id="headingTwo">
+                  <h2 class="mb-0">
+                    <button class="btn btn-light btn-block collapsed" type="button" data-toggle="collapse" data-target="#hint2" aria-expanded="false" aria-controls="hint2">
+                      Hint about manipulating properties of HTML elements
+                    </button>
+                  </h2>
+                </div>
+                <div id="hint2" class="collapse" aria-labelledby="headingTwo">
+                  <div class="card-body">
+                    <p>
+                        Once you have access to an HTML element, you may use JavaScript to alter its properties, such as
+                        style, the same way CSS can be used to change the style of elements. For example, an element can
+                        be hidden by having this property
+                    </p>
+                    <pre class="code-snippet"><code>&lt;div id="someId" style="display: none"&gt; &lt;/div&gt;</code></pre>
+                    <p>
+                        ... and the attribute can be changed using JavaScript like this:
+                    </p>
+                    <pre class="code-snippet"><code>myElement.style.display = "someDisplayValue"</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header" id="headingFive">
+                  <h2 class="mb-0">
+                    <button class="btn btn-info btn-block collapsed" type="button" data-toggle="collapse" data-target="#solution" aria-expanded="false" aria-controls="solution">
+                      Solution
+                    </button>
+                  </h2>
+                </div>
+                <div id="solution" class="collapse" aria-labelledby="headingFive">
+                  <div class="card-body">
+                    <p>
+                        This script, injected into the headline of a blog post, and triggered by clicking on the detail
+                        of the blog post, will reveal the hidden message:
+                    </p>
+                    <pre class="code-snippet"><code>&lt;script&gt;document.getElementById("secretMessage").style.display = "block";&lt;/script&gt;</code></pre>
+                    <p>
+                        You may ask "What is the point of injecting the script to show the message, when I can just
+                        inspect the web page?". Hidden inputs or elements can be, for example, used as parts of forms
+                        to contain data that cannot be seen and modified by users, but it is still relevant for the
+                        backend. A real example is a hidden csrf token used in the forms for creating a blog post or for
+                        resetting the blog posts to default (you can check this again by inspecting the elements). If a
+                        victim were to visit your blog post containing the malicious script, you could exploit the
+                        hidden input/element.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endif %}
+        <br><br>
         <a class="btn btn-primary" href="{{ referer }}#blogposts" role="button">Go Back</a>
+        <br><br>
 {% endblock %}

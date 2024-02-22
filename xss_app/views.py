@@ -17,8 +17,17 @@ class IndexView(generic.ListView):
 
     def __init__(self):
         self.object_list = None
+        self.part1_completed = None
+        self.performed_reflected_xss = None
+        self.part2_completed = None
+        self.performed_stored_xss = None
+
+    def dispatch(self, request, *args, **kwargs):
         self.part1_completed = globals.PART1_COMPLETED
         self.performed_reflected_xss = globals.PERFORMED_REFLECTED_ATTACK
+        self.part2_completed = globals.PART2_COMPLETED
+        self.performed_stored_xss = globals.PERFORMED_STORED_ATTACK
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         return Blog.objects.order_by("-pub_date")[:10]
@@ -27,49 +36,35 @@ class IndexView(generic.ListView):
         context = super(IndexView, self).get_context_data(**kwargs)
         context['part1_completed'] = self.part1_completed
         context['performed_reflected_xss'] = self.performed_reflected_xss
+        context['part2_completed'] = self.part2_completed
+        context['performed_stored_xss'] = self.performed_stored_xss
         return context
 
     def post(self, request, *args, **kwargs):
+        # INPUTS USED FOR EXERCISE 1 SUBMISSION (OR DEFAULT)
         user_input_cookie = request.POST.get('cookieInput')
         real_cookie = request.POST.get('realCookie', 'default=')
         csrf_value = real_cookie.split('=')[1]
+        print("Cookie input by user: {}".format(user_input_cookie))
+        print("Real cookie: {}".format(real_cookie))
 
-        if user_input_cookie == real_cookie or user_input_cookie == csrf_value and self.performed_reflected_xss:
+        # INPUT USED FOR EXERCISE 2 SUBMISSION
+        user_input_secret = request.POST.get('secretInput')
+        print("Secret input by user: {}".format(user_input_secret))
+
+        # CHECK EXERCISE 1 CRITERIA
+        if (user_input_cookie == real_cookie or user_input_cookie == csrf_value) and self.performed_reflected_xss:
             globals.PART1_COMPLETED = True
 
-        self.part1_completed = globals.PART1_COMPLETED
-        self.object_list = self.get_queryset()
-        return render(request, "xss_app/index.html", self.get_context_data(**kwargs))
-
-
-class Exercise2View(generic.View):
-    def __init__(self):
-        self.performed_stored_xss = None
-        self.part2_completed = None
-
-    def dispatch(self, request, *args, **kwargs):
-        self.part2_completed = globals.PART2_COMPLETED
-        self.performed_stored_xss = globals.PERFORMED_STORED_ATTACK
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) if hasattr(super(), 'get_context_data') else {}
-        context['part2_completed'] = self.part2_completed
-        context['performed_stored_xss'] = self.performed_stored_xss
-        context['part1_completed'] = globals.PART1_COMPLETED
-        context['performed_reflected_xss'] = globals.PERFORMED_REFLECTED_ATTACK
-        context['blog_post_list'] = Blog.objects.order_by("-pub_date")[:10]
-        return context
-
-    def post(self, request, *args, **kwargs):
-        user_input_secret = request.POST.get('secretInput')
-
+        # CHECK EXERCISE 2 CRITERIA
         # <script>document.getElementById("secretMessage").style.display = "block";</script>
         if user_input_secret == globals.STORED_SECRET and self.performed_stored_xss:
             globals.PART2_COMPLETED = True
 
+        # SET UPDATED VALUES AND RETURN CONTEXT
+        self.part1_completed = globals.PART1_COMPLETED
         self.part2_completed = globals.PART2_COMPLETED
-
+        self.object_list = self.get_queryset()
         return render(request, "xss_app/index.html", self.get_context_data(**kwargs))
 
 
@@ -135,7 +130,7 @@ class BlogPostCreateView(generic.CreateView):
 
 class ResetAllPostsView(generic.View):
     def post(self, request, *args, **kwargs):
-        Blog.objects.filter(pk__gte=3).delete()
+        Blog.objects.filter(pk__gte=4).delete()
 
         return HttpResponseRedirect(self.get_success_url())
 
@@ -144,9 +139,12 @@ class ResetAllPostsView(generic.View):
 
 
 class ResetExercise1View(generic.View):
+    # Do I want it to reset both or find a way to have exercise 2 completed and exercise 1 reset?
     def post(self, request, *args, **kwargs):
         globals.PART1_COMPLETED = False
         globals.PERFORMED_REFLECTED_ATTACK = False
+        globals.PART2_COMPLETED = False
+        globals.PERFORMED_STORED_ATTACK = False
 
         return HttpResponseRedirect(self.get_success_url())
 
