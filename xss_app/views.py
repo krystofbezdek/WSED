@@ -8,7 +8,26 @@ from django.views import generic
 from .models import Blog
 from . import globals
 
-xss_pattern = re.compile(r'(?:<script.*?>.*?</script>|<.*?javascript:.*?>|<.*?on\w+.*?=.*?>|<\?.*?\?>)', re.IGNORECASE)
+xss_pattern = re.compile(
+    r'''(?:
+    <script.*?>.*?</script>|          # Basic script tags
+    <.*?javascript:.*?>|              # Elements with JavaScript protocol
+    <.*?on\w+.*?=.*?>|                # HTML elements with event handlers
+    <\?.*?\?>|                        # PHP tags
+    <.*?src=['"].*?javascript:.*?>|   # Using javascript: protocol in src attribute of tags
+    <.*?href=['"].*?javascript:.*?>|  # Using javascript: protocol in href attribute of tags
+    <.*?style=['"].*?expression\(.*?\).*?>|  # CSS expression
+    <.*?style=['"].*?url\(['"]?javascript:.*?\).*?>| # CSS url() with JavaScript
+    <.*?(\bon\w+|style|background|src|href|data|action)=['"]?\s*javascript:.*?>| # Common attributes for inline JavaScript
+    <.*?(\bon\w+|style|background|src|href|data|action)=['"]?\s*.*?>| # Common attributes for inline JavaScript wider
+    ['"]?\s*javascript:.*?(;|<|\s)|   # Loose JavaScript protocol occurrences
+    <iframe.*?src=['"].*?>|           # Iframe with src
+    <frame.*?src=['"].*?>|            # Frame with src
+    <.*?data=['"].*?javascript:.*?>|  # Using javascript: protocol in data attribute
+    <.*?background=['"].*?javascript:.*?>| # Using javascript: in background
+    <.*?formaction=['"].*?javascript:.*?>  # Using javascript: in formaction
+    )''',
+    re.IGNORECASE | re.VERBOSE)
 
 
 class IndexView(generic.ListView):
@@ -19,8 +38,10 @@ class IndexView(generic.ListView):
         self.object_list = None
         self.part1_completed = None
         self.performed_reflected_xss = None
+        self.part1_message = None
         self.part2_completed = None
         self.performed_stored_xss = None
+        self.part2_message = None
 
     def dispatch(self, request, *args, **kwargs):
         self.part1_completed = globals.PART1_COMPLETED
@@ -36,8 +57,10 @@ class IndexView(generic.ListView):
         context = super(IndexView, self).get_context_data(**kwargs)
         context['part1_completed'] = self.part1_completed
         context['performed_reflected_xss'] = self.performed_reflected_xss
+        context['part1_message'] = self.part1_message
         context['part2_completed'] = self.part2_completed
         context['performed_stored_xss'] = self.performed_stored_xss
+        context['part2_message'] = self.part2_message
         return context
 
     def post(self, request, *args, **kwargs):
@@ -53,13 +76,14 @@ class IndexView(generic.ListView):
         print("Secret input by user: {}".format(user_input_secret))
 
         # CHECK EXERCISE 1 CRITERIA
-        if (user_input_cookie == real_cookie or user_input_cookie == csrf_value) and self.performed_reflected_xss:
+        if user_input_cookie == csrf_value and self.performed_reflected_xss:
             globals.PART1_COMPLETED = True
+            self.part1_message = True
 
         # CHECK EXERCISE 2 CRITERIA
-        # <script>document.getElementById("secretMessage").style.display = "block";</script>
         if user_input_secret == globals.STORED_SECRET and self.performed_stored_xss:
             globals.PART2_COMPLETED = True
+            self.part2_message = True
 
         # SET UPDATED VALUES AND RETURN CONTEXT
         self.part1_completed = globals.PART1_COMPLETED

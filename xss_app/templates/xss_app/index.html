@@ -140,18 +140,25 @@
     </div>
 
     {% if not part1_completed or not performed_reflected_xss %}
-        <div id="cookieSubmitForm">
+        <div id="cookieSubmitForm" data-performed-reflected-xss="{{ performed_reflected_xss }}">
             <h4>Submit Cookie</h4>
-            <form action="{% url 'xss_app:index' %}#reflectedExercise" method="post">
+            <form action="{% url 'xss_app:index' %}#reflectedExercise" method="post" onsubmit="return checkCookieBeforeSubmit();">
               {% csrf_token %}
               <div class="form-group">
                 <label for="cookieInput">Enter the stolen cookie to unlock the next exercise</label>
-                <input name="cookieInput" type="text" class="form-control" id="cookieInput" aria-describedby="cookieHelp" placeholder="Entire cookie or the value following 'csrfToken='">
+                <input name="cookieInput" type="text" class="form-control" id="cookieInput" aria-describedby="cookieHelp" placeholder="Enter the value following 'csrfToken=' only">
                 <small id="cookieHelp" class="form-text text-muted">Don't even try cheating by just submitting the cookie value without conducting the attack ;)</small>
                 <input name="realCookie" type="hidden" id="realCookie">
               </div>
               <button type="submit" class="btn btn-primary" onclick="setRealCookie()">Submit</button>
             </form>
+        </div>
+        <br>
+        <div id="incorrectEx1Message" style="display: none" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Incorrect!</strong> Either your cookie is incorrect, or you have not actually completed the XSS attack!
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
     {% else %}
         <div id="resetEx1">
@@ -161,6 +168,15 @@
                 <small class="text-muted">If you have completed Exercise 2, it will be reset as well!</small>
             </form>
         </div>
+        <br>
+        {% if part1_message %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <strong>Congratulations!</strong> You have successfully completed exercise 1! Continue to Stored XSS attack and Exercise 2!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+        {% endif %}
         <br>
         <div id="storedExercises">
             <h2 id="storedXSS">Stored XSS</h2>
@@ -248,9 +264,9 @@
         <br>
 
         {% if not part2_completed or not performed_stored_xss %}
-            <div id="secretSubmitForm">
+            <div id="secretSubmitForm" data-performed-stored-xss="{{ performed_stored_xss }}">
                 <h4>Submit Secret</h4>
-                <form action="{% url 'xss_app:index' %}#createnew" method="post">
+                <form action="{% url 'xss_app:index' %}#createnew" method="post" onsubmit="return checkSecretBeforeSubmit();">
                   {% csrf_token %}
                   <div class="form-group">
                     <label for="secretInput">Enter the stolen secret to unlock XSS Defences</label>
@@ -261,6 +277,13 @@
                 </form>
             </div>
             <br>
+            <div id="incorrectEx2Message" style="display: none" class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>Incorrect!</strong> Either your secret is incorrect, or you have not actually completed the XSS attack!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <br>
         {% elif part2_completed and performed_stored_xss %}
             <div id="resetEx2">
                 <form action="{% url 'xss_app:resetEx2' %}" method="post">
@@ -268,6 +291,15 @@
                     <button type="submit" class="btn btn-warning">RESET EXERCISE 2</button>
                 </form>
             </div>
+            <br>
+            {% if part2_message %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>Congratulations!</strong> You have successfully completed Exercise 2! Time to learn about XSS Defences now!
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+            {% endif %}
             <br><br>
             <div id="defences">
                 <h2>XSS Defences</h2>

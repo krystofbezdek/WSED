@@ -55,6 +55,33 @@
         function setRealCookie() {
             document.getElementById("realCookie").value = document.cookie;
         }
+
+        function checkCookieBeforeSubmit() {
+            let cookie = document.cookie.split("=").at(1);
+            let userInput =  document.getElementById("cookieInput").value;
+            let performedAttack = document.getElementById('cookieSubmitForm').getAttribute('data-performed-reflected-xss') === 'True';
+
+            if (userInput !== cookie || !performedAttack) {
+                document.getElementById('incorrectEx1Message').style.display = 'block';
+                return false;
+            } else {
+                document.getElementById('incorrectEx1Message').style.display = 'none';
+                return true;
+            }
+        }
+
+        function checkSecretBeforeSubmit() {
+            let secretValue = document.getElementById('secretInput').value;
+            let performedAttack = document.getElementById('secretSubmitForm').getAttribute('data-performed-stored-xss') === 'True';
+
+            if (secretValue !== 'I never skip breakfast!' || !performedAttack) {
+                document.getElementById('incorrectEx2Message').style.display = 'block';
+                return false;
+            } else {
+                document.getElementById('incorrectEx2Message').style.display = 'none';
+                return true;
+            }
+        }
     </script>
 </head>
 <body onload="changeGenZElement()">
