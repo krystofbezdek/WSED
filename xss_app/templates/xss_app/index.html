@@ -259,6 +259,7 @@
             <form action="{% url 'xss_app:resetAll' %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">RESET BLOG POSTS TO DEFAULT</button>
+                <small id="resetHelp" class="form-text text-muted">All blog posts apart from the original 3 will be deleted</small>
             </form>
         </div>
         <br>

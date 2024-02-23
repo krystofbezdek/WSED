@@ -159,7 +159,7 @@ class ResetAllPostsView(generic.View):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse('xss_app:index') + '#blogposts'
+        return reverse('xss_app:index') + '#exercise2'
 
 
 class ResetExercise1View(generic.View):
