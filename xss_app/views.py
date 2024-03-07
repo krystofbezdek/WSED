@@ -68,12 +68,9 @@ class IndexView(generic.ListView):
         user_input_cookie = request.POST.get('cookieInput')
         real_cookie = request.POST.get('realCookie', 'default=')
         csrf_value = real_cookie.split('=')[1]
-        print("Cookie input by user: {}".format(user_input_cookie))
-        print("Real cookie: {}".format(real_cookie))
 
         # INPUT USED FOR EXERCISE 2 SUBMISSION
         user_input_secret = request.POST.get('secretInput')
-        print("Secret input by user: {}".format(user_input_secret))
 
         # CHECK EXERCISE 1 CRITERIA
         if user_input_cookie == csrf_value and self.performed_reflected_xss:

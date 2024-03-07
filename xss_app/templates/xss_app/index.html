@@ -6,16 +6,10 @@
     <div id="sidenav" class="list-group list-group-flush">
         <a class="list-group-item list-group-item-action" href="#top" role="navigation" >Go to Top</a>
         <a class="list-group-item list-group-item-action" href="#introduction" role="navigation" >Introduction</a>
-        <a class="list-group-item list-group-item-action" href="#typesOfXSS" role="navigation" >Types of XSS Attacks</a>
-        <a class="list-group-item list-group-item-action" href="#carryOutXSS" role="navigation" >Carrying Out XSS Attacks</a>
-        <a class="list-group-item list-group-item-action" href="#reflectedXSS" role="navigation" >Reflected XSS</a>
         <a class="list-group-item list-group-item-action" href="#exercise1" role="navigation" >Exercise 1</a>
-        <a class="list-group-item list-group-item-action" href="#search" role="navigation" >Search Bar</a>
         {% if part1_completed %}
             <a class="list-group-item list-group-item-action" href="#storedXSS" role="navigation" >Stored XSS</a>
             <a class="list-group-item list-group-item-action" href="#exercise2" role="navigation" >Exercise 2</a>
-            <a class="list-group-item list-group-item-action" href="#blogposts" role="navigation" >Blog Posts</a>
-            <a class="list-group-item list-group-item-action" href="#createnew" role="navigation" >Create Blog Post</a>
         {% endif %}
         {% if part2_completed %}
             <a class="list-group-item list-group-item-action" href="#defences" role="navigation" >Defences</a>
@@ -140,6 +134,7 @@
     </div>
 
     {% if not part1_completed or not performed_reflected_xss %}
+        <hr>
         <div id="cookieSubmitForm" data-performed-reflected-xss="{{ performed_reflected_xss }}">
             <h4>Submit Cookie</h4>
             <form action="{% url 'xss_app:index' %}#reflectedExercise" method="post" onsubmit="return checkCookieBeforeSubmit();">
@@ -197,11 +192,12 @@
                     posts are persistent data which is stored in a database and displayed by the frontend.
                     <br><br>
                     In this exercise, you have to conduct a stored XSS attack to obtain a secret message. This secret is
-                    contained in a hidden HTML element, and your script should reveal the element containing secret in
-                    order to steal it. Think about when and where your injected script runs and what can it access.
-                    Inspecting the website can help you with finding the secret message! If you are not sure how to
-                    proceed, take a look at the blog posts, maybe they contain something interesting! Or maybe you
-                    already know exactly what to do, in that case do what you need to do!
+                    contained in a hidden HTML element, and in order to steal it, your script should reveal the element
+                    containing the secret, or it could display the value using alert, it is up to you. Think about when
+                    and where your injected script runs and what elements can it access. Inspecting the website can help
+                    you with finding the secret message! If you are not sure how to proceed, take a look at the blog
+                    posts, maybe they contain something interesting! Or maybe you already know exactly what to do, in
+                    that case do what you need to do!
                 </p>
                 <br>
         </div>
@@ -244,10 +240,11 @@
                     <label for="headlineFor">Headline</label>
                     <input name="headline" type="text" class="form-control" id="headlineFor" aria-describedby="headlineHelp" placeholder="Summarize your thoughts">
                     <small id="headlineHelp" class="form-text text-muted">Name your post here</small>
-                  </div>
+                </div>
                 <div class="form-group">
                     <label for="contentFor">Content</label>
                     <textarea name="content" class="form-control" id="contentFor" placeholder="What do you want to say?" rows="4"></textarea>
+                    <small class="form-text text-muted">Be sure to fill out both headline and content</small>
                 </div>
                 <button type="submit" class="btn btn-primary">Create</button>
             </form>
@@ -265,6 +262,7 @@
         <br>
 
         {% if not part2_completed or not performed_stored_xss %}
+            <hr>
             <div id="secretSubmitForm" data-performed-stored-xss="{{ performed_stored_xss }}">
                 <h4>Submit Secret</h4>
                 <form action="{% url 'xss_app:index' %}#createnew" method="post" onsubmit="return checkSecretBeforeSubmit();">
