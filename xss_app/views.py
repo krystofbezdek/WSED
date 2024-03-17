@@ -111,12 +111,15 @@ class SearchResultsView(generic.ListView):
 
     def get_queryset(self):
         query = self.request.GET.get("q")
+        object_list = None
 
         if xss_pattern.search(query):
             globals.PERFORMED_REFLECTED_ATTACK = True
 
         param = f'%{query}%'
-        object_list = Blog.objects.raw("SELECT * FROM xss_app_blog WHERE headline LIKE %s", [param])
+        if param != '%%':
+            object_list = Blog.objects.raw("SELECT * FROM xss_app_blog WHERE headline LIKE %s", [param])
+
         return object_list
 
     def get_context_data(self, **kwargs):

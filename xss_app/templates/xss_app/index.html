@@ -43,9 +43,10 @@
             There will be two exercises for you to complete, with hints and solutions available if needed.
             <br><br>
             This web application is used for creating, displaying and searching for blog posts made by users. It is
-            quite vulnerable and you will exploit these vulnerabilities. You can see all the blog posts, the search bar,
-            and the form for creating new blog posts near the bottom of the page.
-            Let's get started!
+            quite vulnerable, and you will exploit these vulnerabilities. You will unlock the search bar, all the blog posts,
+            and the form for creating new blog posts as you progress through the exercises. Below is some useful information
+            about XSS attacks if you need to refresh your knowledge, <b>but you can jump right to the Exercise 1 using the
+            left panel if you want to.</b> Let's get started!
         </p>
     </div>
 
@@ -115,8 +116,8 @@
         <p>
             As previously mentioned, reflected XSS attacks reflect the user input directly onto the rendered page. Use
             the search bar below to search for a blog post and exploit it to conduct the attack. The posted blog posts
-            and form for creating new ones will appear alongside the second exercise once you successfully conduct the
-            attack and submit the correct cookie value!
+            and form for creating new ones will appear alongside the second exercise once you <b>successfully conduct the
+            attack and submit the correct cookie value!</b>
         </p>
     </div>
 
@@ -191,10 +192,10 @@
                     Below you can see all the blog posts, their author, and the date and time they were posted. These blog
                     posts are persistent data which is stored in a database and displayed by the frontend.
                     <br><br>
-                    In this exercise, you have to conduct a stored XSS attack to obtain a secret message. This secret is
+                    In this exercise, you have to <b>conduct a stored XSS attack to obtain a secret message.</b> This secret is
                     contained in a hidden HTML element, and in order to steal it, your script should reveal the element
-                    containing the secret, or it could display the value using alert, it is up to you. Think about when
-                    and where your injected script runs and what elements can it access. Inspecting the website can help
+                    containing the secret, or it could display the value using alert, it is up to you. Think about <b>when
+                    and where</b> your injected script runs and what elements can it access. Inspecting the website can help
                     you with finding the secret message! If you are not sure how to proceed, take a look at the blog
                     posts, maybe they contain something interesting!
                 </p>
