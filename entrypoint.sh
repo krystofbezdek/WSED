@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Apply changes to xss_app tables
 echo "Making xss_app migrations"
 python manage.py makemigrations xss_app
 
