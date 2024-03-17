@@ -38,12 +38,9 @@
             You have successfully searched for a blog post! It does not matter if your search yielded results, what
             matters is that you gained information about the search request! Specifically, there are two pieces of
             information you need to test the vulnerability of this search request. Think about the user input and how
-            it can be used to run a script.
+            it can be used to run a script. <b>Craft a malicious script to obtain the website's cookie.</b>
+            Don't forget to copy it for submission on the main page!
         </p>
-        <ol>
-            <li>Can you figure out what information it is and use it to obtain this website's cookie on this page?</li>
-            <li>Can you craft a clickable link which could be sent to potential victim?</li>
-        </ol>
         <br>
         <div class="accordion" id="accordionExample">
           <h4>Hints</h4>
@@ -140,7 +137,7 @@
                 </p>
                 <pre class="code-snippet"><code>&lt;script&gt;alert(document.cookie);&lt;/script&gt;</code></pre>
                 <p>
-                    ...and this is how your link could look like:
+                    ...and this is how a link you could send someone could look like:
                 </p>
                 <pre class="code-snippet"><code><a href="http://127.0.0.1:8000/xss_app/search/?q=<script>alert(document.cookie);</script>">http://127.0.0.1:8000/xss_app/search/?q=&lt;script&gt;alert(document.cookie);&lt;/script&gt;</a></code></pre>
                 <p>
