@@ -1,0 +1,15 @@
+{% extends "xss_app/../base.html" %}
+
+{% block title %} Thank You! {% endblock %}
+
+{% block content %}
+    <h1>Congratulations! You have successfully completed the XSS exploits and defences tutorial!</h1>
+    <p>
+        Thank you for participating, we hope you have enjoyed conducting these attacks and learning about defences!
+        Feel free to provide any feedback by contacting the creator at <b>krystof.bezdek@gmail.com</b> or contributing
+        directly to the open source project at <a href="https://github.com/krystofbezdek/WSED" target="_blank">GitHub</a>!
+        <br><br>
+        <a class="btn btn-primary" href="{% url 'home' %}" role="button">To Home Page</a>
+    </p>
+    <br>
+{% endblock %}

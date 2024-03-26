@@ -4,9 +4,8 @@
 
 {% block content %}
     <h4>Create New Blog Post</h4>
-        {#  THIS IS ON PURPOSE VULNERABLE - FOR SAFE USAGE, USE POST AND CSRF TOKEN  #}
-        <form action="{% url 'xss_app:create' %}" method="get">
-            {#{% csrf_token %}#}
+        <form action="{% url 'xss_app:create' %}" method="post">
+            {% csrf_token %}
             <div class="form-group">
                 <label for="headlineFor">Headline</label>
                 <input name="headline" type="text" class="form-control" id="headlineFor" aria-describedby="headlineHelp" placeholder="Summarize your thoughts">
@@ -15,6 +14,7 @@
             <div class="form-group">
                 <label for="contentFor">Content</label>
                 <textarea name="content" class="form-control" id="contentFor" placeholder="What do you want to say?" rows="4"></textarea>
+                <small class="form-text text-muted">Be sure to fill out both headline and content</small>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
         </form>
