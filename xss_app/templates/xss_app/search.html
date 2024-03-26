@@ -30,14 +30,12 @@
             You have successfully searched for a blog post! It does not matter if your search yielded results, what
             matters is that you gained information about the search request! Specifically, there are two pieces of
             information you need to test the vulnerability of this search request.
-            <br>
-            <br>
-            Can you figure out what information it is?
-            <br>
-            Can you use this information to simply cause an alert on this page?
-            <br>
-            Can you craft a clickable link from this?
         </p>
+        <ol>
+            <li>Can you figure out what information it is?</li>
+            <li>Can you use this information to display this website's cookie on this page?</li>
+            <li>Can you craft a clickable link from this?</li>
+        </ol>
         <a class="btn btn-primary" href="{% url 'xss_app:index' %}#reflectedExercise" role="button">Back to Exercises</a>
         <br><br><br>
         <div class="accordion" id="accordionExample">
@@ -66,7 +64,7 @@
             <div class="card-header" id="headingTwo">
               <h2 class="mb-0">
                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#hint2" aria-expanded="false" aria-controls="hint2">
-                  Hint about injecting script into HTML
+                  Hint about injecting inline script into HTML
                 </button>
               </h2>
             </div>
@@ -76,6 +74,25 @@
                     In order to load and run JavaScript in a browser, you have to wrap the code in:
                 </p>
                 <pre class="code-snippet"><code>&lt;script&gt; Here you can define your JavaScript code &lt;/script&gt;</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#hint3" aria-expanded="false" aria-controls="hint3">
+                  Hint about obtaining the cookie
+                </button>
+              </h2>
+            </div>
+            <div id="hint3" class="collapse" aria-labelledby="headingTwo">
+              <div class="card-body">
+                <p>
+                    In order to access the website's cookie, you can use <b>document.cookie</b>. I would recommend trying this
+                    out by right clicking this website, choosing to "Inspect" it, and typing <b>document.cookie</b> into the
+                    console.
+                </p>
               </div>
             </div>
           </div>
@@ -93,11 +110,11 @@
                 <p>
                 This is the script you should insert as query parameter in order to cause an alert:
                 </p>
-                <pre class="code-snippet"><code>&lt;script&gt;alert("Congratulations! You have completed exercise 1!");&lt;/script&gt;</code></pre>
+                <pre class="code-snippet"><code>&lt;script&gt;alert(document.cookie);&lt;/script&gt;</code></pre>
                 <p>
                     ...and this is how your link should look like:
                 </p>
-                <pre class="code-snippet"><code><a href="http://127.0.0.1:8000/xss_app/search/?q=<script>alert('Congratulations! You have completed exercise 1!');</script>">http://127.0.0.1:8000/xss_app/search/?q=&lt;script&gt;alert("Congratulations! You have completed exercise 1!");&lt;/script&gt;</a></code></pre>
+                <pre class="code-snippet"><code><a href="http://127.0.0.1:8000/xss_app/search/?q=<script>alert(document.cookie);</script>">http://127.0.0.1:8000/xss_app/search/?q=&lt;script&gt;alert(document.cookie);&lt;/script&gt;</a></code></pre>
               </div>
             </div>
           </div>

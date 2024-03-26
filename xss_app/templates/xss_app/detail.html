@@ -13,15 +13,14 @@
         <div id="prank" style="display: none">
             <br><br>
             <h4>
-                Well, it seems like the content field is secured well, both on the wall and in post detail!
-                Oopsie, my bad... Try something else?
+                It seems like the content field is secured well, both on the wall and in post detail! Try something else?
             </h4>
         </div>
         <div id="defeat" style="display: none">
             <br><br>
             <h4>
-                Good job figuring it out! You have successfully embedded the script in the place of the blog post's
-                headline! Maybe you are ready for more...
+                Good job! You have successfully injected the script in the place of the blog post's headline!
+                You should look into how to defend against these attacks!
             </h4>
         </div>
         <br>
@@ -33,7 +32,7 @@
                 document.getElementById('prank').style.display = 'block';
             }
             if (unsecureHeading.includes("<script>") && unsecureHeading.includes("<\/script>")) {
-                document.getElementById('secureContent').innerHTML = "Oh no! The wall is protected but I did not sanitise my headline rendering here!";
+                document.getElementById('secureContent').innerHTML = "Oh no! The wall is protected but I did not escape my headline rendering here!";
                 document.getElementById('defeat').style.display = 'block';
                 document.getElementById('prank').style.display = 'none';
             }
