@@ -13,6 +13,13 @@ class HomeView(generic.ListView):
     def get_queryset(self):
         return []
 
+class FinishView(generic.ListView):
+    template_name = 'WSED/finish.html'
+    context_object_name = 'nothing'
+
+    def get_queryset(self):
+        return []
+
 
 class CustomLoginView(LoginView):
     def get_success_url(self):

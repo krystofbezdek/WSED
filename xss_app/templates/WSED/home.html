@@ -13,32 +13,19 @@
         This web application serves both as the source of information and assignments, and as the target vulnerable
         application you as the user will exploit. The first tutorial focused on XSS mimics an application for creating,
         browsing and searching blogs. You can also register and log in with different user accounts, but this
-        <b>is not necessary</b> unless you attempt the advanced XSS exercises.
+        <b>is not necessary</b> unless you attempt the advanced XSS exercises (coming soon!).
         <br><br>
-        If you feel like these exercises are not challenging anymore, I would recommend checking out
+        If you feel like these exercises are not challenging enough, I would recommend checking out
         <a href="https://google-gruyere.appspot.com/#0__gruyere" target="_blank">Google's Gruyere</a> or
         <a href="https://www.hackthebox.com/" target="_blank">Hack the Box</a> for more difficult challenges!
         <br><br>
         But for now, go ahead and tackle the first set of exercises about XSS attacks!
         <br><br>
         If you think that you have short attention span from watching too many TikToks, try using the <b>Gen Z Mode</b>
-        in the upper right corner if you get bored!
+        while completing the exercises. You can activate it in the upper right corner if you get bored!
         <br><br>
         <a class="btn btn-primary" href="{% url 'xss_app:index' %}" role="button">XSS Tutorial</a>
     </p>
     <br>
-{#    <h3>TODO:</h3>#}
-{#    <ol>#}
-{#        <li>3 modes - full guide through, exercises, playground?</li>#}
-{#        <li>Add visualisation for attacks</li>#}
-{#        <li>Add icons for recognition rather than recall</li>#}
-{#        <li>Add regex for checking of scripts</li>#}
-{#        <li>Make hints in search not look like link, but rather nice buttons</li>#}
-{#        <li>Mention addition and readability change for navbar by adding |</li>#}
-{#        <li>Hide everything below Exercise 1 until it is completed</li>#}
-{#        <li>Add separators between sections for clearer differentiation</li>#}
-{#        <li>Make the tasks more clear so that everyone actually conducts the attacks</li>#}
-{#        <li>Highlight dynamically rendered text so that the user actually reads it (red, green)</li>#}
-{#        <li>Explain output and input encoding better, whitelisting as well</li>#}
-{#    </ol>#}
+
 {% endblock %}
