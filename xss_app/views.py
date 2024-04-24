@@ -20,7 +20,6 @@ xss_pattern = re.compile(
     <.*?style=['"].*?url\(['"]?javascript:.*?\).*?>| # CSS url() with JavaScript
     <.*?(\bon\w+|style|background|src|href|data|action)=['"]?\s*javascript:.*?>| # Common attributes for inline JavaScript
     <.*?(\bon\w+|style|background|src|href|data|action)=['"]?\s*.*?>| # Common attributes for inline JavaScript wider
-    ['"]?\s*javascript:.*?(;|<|\s)|   # Loose JavaScript protocol occurrences
     <iframe.*?src=['"].*?>|           # Iframe with src
     <frame.*?src=['"].*?>|            # Frame with src
     <.*?data=['"].*?javascript:.*?>|  # Using javascript: protocol in data attribute
